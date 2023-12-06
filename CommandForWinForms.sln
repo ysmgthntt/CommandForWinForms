@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34316.72
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E1893877-2C58-4C20-B8E7-11973E9DB275}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandForWinForms", "src\CommandForWinForms\CommandForWinForms.csproj", "{D46C1893-49BF-415E-8F37-F3D4184D11CB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D46C1893-49BF-415E-8F37-F3D4184D11CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D46C1893-49BF-415E-8F37-F3D4184D11CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D46C1893-49BF-415E-8F37-F3D4184D11CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D46C1893-49BF-415E-8F37-F3D4184D11CB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D46C1893-49BF-415E-8F37-F3D4184D11CB} = {E1893877-2C58-4C20-B8E7-11973E9DB275}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6553CAFA-E5DE-4506-AB31-DB84D85D4D65}
+	EndGlobalSection
+EndGlobal
