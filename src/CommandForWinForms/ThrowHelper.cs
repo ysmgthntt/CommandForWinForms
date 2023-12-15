@@ -37,7 +37,7 @@ internal static class ANE
     private static void Throw(string? paramName) =>
         throw new ArgumentNullException(paramName);
 }
-
+#if NETFRAMEWORK
 namespace System.Runtime.CompilerServices
 {
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = false)]
@@ -51,4 +51,5 @@ namespace System.Runtime.CompilerServices
         public string ParameterName { get; }
     }
 }
+#endif
 #endif

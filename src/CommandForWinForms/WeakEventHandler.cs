@@ -4,6 +4,7 @@ namespace CommandForWinForms
 {
     internal sealed class WeakEventHandler
     {
+#if !NET35
         private readonly ConditionalWeakTable<object, object> _weakTable = new();
         private readonly List<WeakReference<EventHandler>> _eventHandlers = new();
 
@@ -74,5 +75,12 @@ namespace CommandForWinForms
                     _eventHandlers.RemoveAt(i--);
             }
         }
+#else
+        private event EventHandler? _eventHandler;
+        public void AddHandler(EventHandler? value) => _eventHandler += value;
+        public void RemoveHandler(EventHandler? value) => _eventHandler -= value;
+        public bool IsEmpty => _eventHandler is null;
+        public void Invoke(object sender, EventArgs e) => _eventHandler?.Invoke(sender, e);
+#endif
     }
 }

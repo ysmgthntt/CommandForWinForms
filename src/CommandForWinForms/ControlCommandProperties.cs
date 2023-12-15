@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Windows.Input;
 
 namespace CommandForWinForms
 {

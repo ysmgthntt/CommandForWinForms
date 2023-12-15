@@ -1,6 +1,4 @@
-﻿using System.Windows.Input;
-
-namespace CommandForWinForms
+﻿namespace CommandForWinForms
 {
     public sealed class ExecutedEventArgs : EventArgs
     {
