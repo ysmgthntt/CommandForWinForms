@@ -15,6 +15,6 @@
         }
 
         protected internal override bool Matches(Control target, MouseAction mouseAction, ModifierKeys modifiers)
-            => MouseAction != MouseAction.None && mouseAction == MouseAction && ((modifiers & Modifiers) == Modifiers);
+            => MouseAction != MouseAction.None && mouseAction == MouseAction && modifiers == Modifiers;
     }
 }

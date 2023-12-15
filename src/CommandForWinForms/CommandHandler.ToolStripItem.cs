@@ -5,7 +5,10 @@ namespace CommandForWinForms
     partial class ControlCommandProperties
     {
         public static ICommand? GetCommand(this ToolStripItem item)
-            => GetCommandCore(item);
+        {
+            ANE.ThrowIfNull(item);
+            return GetCommandCore(item);
+        }
 
         public static void SetCommand(this ToolStripItem item, ICommand? command, object? parameter = null, Control? target = null)
         {

@@ -25,6 +25,6 @@
         }
 
         protected internal override bool Matches(Control target, KeyEventArgs keyEventArgs)
-            => keyEventArgs.KeyCode == Key && ((keyEventArgs.Modifiers & (Keys)Modifiers) == (Keys)Modifiers);
+            => keyEventArgs.KeyCode == Key && keyEventArgs.Modifiers == (Keys)Modifiers;
     }
 }

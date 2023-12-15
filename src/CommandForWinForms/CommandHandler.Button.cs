@@ -5,7 +5,10 @@ namespace CommandForWinForms
     partial class ControlCommandProperties
     {
         public static ICommand? GetCommand(this ButtonBase button)
-            => GetCommandCore(button);
+        {
+            ANE.ThrowIfNull(button);
+            return GetCommandCore(button);
+        }
 
         public static void SetCommand(this ButtonBase button, ICommand? command, object? parameter = null, Control? target = null)
         {

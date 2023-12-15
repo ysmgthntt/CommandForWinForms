@@ -65,26 +65,25 @@ namespace CommandForWinForms
 
         private static Dictionary<IComponent, CommandHandler?>? _commands;
 
-        private static ICommand? GetCommandCore(IComponent source)
+        private static ICommand? GetCommandCore(IComponent component)
         {
-            ANE.ThrowIfNull(source);
-            if (_commands is null || !_commands.TryGetValue(source, out var commandHandler))
+            if (_commands is null || !_commands.TryGetValue(component, out var commandHandler))
                 return null;
             return commandHandler?.Command;
         }
 
-        private static void SetCommandCore(IComponent source, CommandHandler? commandHandler)
+        private static void SetCommandCore(IComponent component, CommandHandler? commandHandler)
         {
             if (_commands is null)
             {
                 if (commandHandler is null)
                     return;
                 _commands = [];
-                source.Disposed += _commands.Key_Disposed;
+                component.Disposed += _commands.Key_Disposed;
             }
             else
             {
-                if (_commands.TryGetValue(source, out var old))
+                if (_commands.TryGetValue(component, out var old))
                 {
                     old?.DetachEvents();
                 }
@@ -92,29 +91,34 @@ namespace CommandForWinForms
                 {
                     if (commandHandler is null)
                         return;
-                    source.Disposed += _commands.Key_Disposed;
+                    component.Disposed += _commands.Key_Disposed;
                 }
             }
-            _commands[source] = commandHandler;
+            _commands[component] = commandHandler;
+            _allUICommands = null;
         }
 
-        internal static void RaiseCanExecuteChangedAllUICommand()
+        private static HashSet<UICommandBase>? _allUICommands;
+
+        internal static void RaiseCanExecuteChangedAllUICommands()
         {
-            if (_commands is not null)
+            if (_allUICommands is not null)
             {
-                // TODO: DistinctedCommands
+                foreach (var uicommand in _allUICommands)
+                    uicommand.RaiseCanExecuteChanged();
+            }
+            else if (_commands is not null)
+            {
                 var raised = new HashSet<UICommandBase>();
                 foreach (var commandHandler in _commands.Values)
                 {
                     if (commandHandler?.Command is UICommandBase uicommand)
                     {
-                        if (raised.Contains(uicommand))
-                            continue;
-
-                        uicommand.RaiseCanExecuteChanged();
-                        raised.Add(uicommand);
+                        if (raised.Add(uicommand))
+                            uicommand.RaiseCanExecuteChanged();
                     }
                 }
+                _allUICommands = raised;
             }
         }
     }

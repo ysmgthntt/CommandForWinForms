@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace CommandForWinForms
@@ -59,7 +60,7 @@ namespace CommandForWinForms
                     {
                         if (inputBinding.Gesture.Matches(target, keyEventArgs))
                         {
-                            target.BeginInvoke(ExecuteCommand, inputBinding, target);
+                            ((ISynchronizeInvoke)target).BeginInvoke(ExecuteCommand, [inputBinding, target]);
                             return true;
                         }
                     }
@@ -93,6 +94,7 @@ namespace CommandForWinForms
 
             return false;
         }
+
         private static void ExecuteCommand(ICommandSource commandSource, Control target)
         {
             var command = commandSource.Command;
@@ -131,7 +133,7 @@ namespace CommandForWinForms
             _requerySuggested = false;
             //Debug.WriteLine($"{nameof(KillTimer)}: {nIDEvent}");
             KillTimer(hWnd, nIDEvent);
-            ControlCommandProperties.RaiseCanExecuteChangedAllUICommand();
+            ControlCommandProperties.RaiseCanExecuteChangedAllUICommands();
         }
 
         private delegate void TimerProc(IntPtr hWnd, uint uMsg, IntPtr nIDEvent, uint dwTime);

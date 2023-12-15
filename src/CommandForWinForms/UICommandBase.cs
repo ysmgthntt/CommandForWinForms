@@ -40,7 +40,12 @@ namespace CommandForWinForms
 
         // ICommand
 
-        public event EventHandler? CanExecuteChanged;
+        private readonly WeakEventHandler _canExecuteChanged = new();
+        public event EventHandler? CanExecuteChanged
+        {
+            add => _canExecuteChanged.AddHandler(value);
+            remove => _canExecuteChanged.RemoveHandler(value);
+        }
 
         bool ICommand.CanExecute(object? parameter)
             => CanExecute(parameter, null);
@@ -112,14 +117,14 @@ namespace CommandForWinForms
 
         internal void RaiseCanExecuteChanged()
         {
-            if (CanExecuteChanged is not null)
+            if (!_canExecuteChanged.IsEmpty)
             {
                 _inRaiseCanExecuteChanged = true;
                 _lastCanExecuteParameter = null;
                 _lastCanExecuteTarget = null;
                 try
                 {
-                    CanExecuteChanged(this, EventArgs.Empty);
+                    _canExecuteChanged.Invoke(this, EventArgs.Empty);
                 }
                 finally
                 {
