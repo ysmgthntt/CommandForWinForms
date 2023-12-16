@@ -87,6 +87,55 @@ namespace CommandForWinForms.Tests
             });
         }
 
+#if NETFRAMEWORK
+        private sealed class DisposeTestMenuItem : MenuItem
+        {
+            public readonly IntWrapper _intWrapper;
+
+            public DisposeTestMenuItem(IntWrapper intWrapper)
+                => _intWrapper = intWrapper;
+
+            ~DisposeTestMenuItem()
+                => _intWrapper.Value++;
+        }
+
+        private sealed class DisposeTestToolBarButton : ToolBarButton
+        {
+            public readonly IntWrapper _intWrapper;
+
+            public DisposeTestToolBarButton(IntWrapper intWrapper)
+                => _intWrapper = intWrapper;
+
+            ~DisposeTestToolBarButton()
+                => _intWrapper.Value++;
+        }
+
+        [Fact]
+        public void DisposeMenuItemTest()
+        {
+            DisposeTest((intWrapper) =>
+            {
+                var menuItem = new DisposeTestMenuItem(intWrapper);
+                menuItem.SetCommand(_staticTestCommand);
+                return menuItem;
+            });
+        }
+
+        [Fact]
+        public void DisposeToolBarButtonTest()
+        {
+            DisposeTest((intWrapper) =>
+            {
+                var button = new DisposeTestToolBarButton(intWrapper);
+                var toolBar = new ToolBar();
+                toolBar.Buttons.Add(button);
+                button.SetCommand(_staticTestCommand);
+                return button;
+            });
+        }
+#endif
+
+#if NET
         private static readonly UICommand _staticTestUICommand = new UICommand("text", "name");
 
         [Fact]
@@ -110,6 +159,7 @@ namespace CommandForWinForms.Tests
                 return item;
             });
         }
+#endif
 
         [Fact]
         public void AvailableButtonTest()
@@ -144,6 +194,10 @@ namespace CommandForWinForms.Tests
             command.RaiseCanExecuteChanged();
             Assert.Equal(2, enabledCount);
             Assert.Equal(2, canExecuteCount);
+            enabled = false;
+            button.Visible = true;
+            Assert.Equal(3, enabledCount);
+            Assert.Equal(3, canExecuteCount);
         }
 
         [Fact]
@@ -183,7 +237,82 @@ namespace CommandForWinForms.Tests
             command.RaiseCanExecuteChanged();
             Assert.Equal(2, enabledCount);
             Assert.Equal(2, canExecuteCount);
+            enabled = false;
+            button.Visible = true;
+            Assert.Equal(3, enabledCount);
+            Assert.Equal(3, canExecuteCount);
         }
+
+#if NETFRAMEWORK
+        [Fact]
+        public void AvailableMenuItemTest()
+        {
+            using var menuItem = new MenuItem();
+
+            Assert.True(menuItem.Visible);
+            Assert.True(menuItem.Enabled);
+            bool enabled = false;
+            int canExecuteCount = 0;
+            var command = new TestCommand(_ => { }, _ =>
+            {
+                canExecuteCount++;
+                return enabled;
+            });
+            menuItem.SetCommand(command);
+
+            command.RaiseCanExecuteChanged();
+            Assert.False(menuItem.Enabled);
+            Assert.Equal(1, canExecuteCount);
+            enabled = true;
+            command.RaiseCanExecuteChanged();
+            Assert.True(menuItem.Enabled);
+            Assert.Equal(2, canExecuteCount);
+            menuItem.Visible = false;
+            // VisibleChanged がないため変化しない。
+            command.RaiseCanExecuteChanged();
+            Assert.True(menuItem.Enabled);
+            Assert.Equal(3, canExecuteCount);
+            enabled = false;
+            menuItem.Visible = true;
+            Assert.True(menuItem.Enabled);
+            Assert.Equal(3, canExecuteCount);
+        }
+
+        [Fact]
+        public void AvailableToolBarButtonTest()
+        {
+            using var parent = new ToolBar();
+            using var button = new ToolBarButton();
+            parent.Buttons.Add(button);
+
+            Assert.True(button.Visible);
+            Assert.True(button.Enabled);
+            bool enabled = false;
+            int canExecuteCount = 0;
+            var command = new TestCommand(_ => { }, _ =>
+            {
+                canExecuteCount++;
+                return enabled;
+            });
+            button.SetCommand(command);
+
+            command.RaiseCanExecuteChanged();
+            Assert.False(button.Enabled);
+            Assert.Equal(1, canExecuteCount);
+            enabled = true;
+            command.RaiseCanExecuteChanged();
+            Assert.True(button.Enabled);
+            Assert.Equal(2, canExecuteCount);
+            parent.Visible = false;
+            command.RaiseCanExecuteChanged();
+            Assert.True(button.Enabled);
+            Assert.Equal(2, canExecuteCount);
+            enabled = false;
+            parent.Visible = true;
+            Assert.False(button.Enabled);
+            Assert.Equal(3, canExecuteCount);
+        }
+#endif
 
         private void ExecuteTest(Action<ICommand, object> setCommand, Action click)
         {
@@ -277,6 +406,33 @@ namespace CommandForWinForms.Tests
             using var button = new ToolStripButton();
             ExecuteTest((command, parameter) => button.SetCommand(command, parameter), button.PerformClick);
         }
+
+#if NETFRAMEWORK
+        [Fact]
+        public void ExecuteMenuItemTest()
+        {
+            using var menuItem = new MenuItem();
+            ExecuteTest((command, parameter) => menuItem.SetCommand(command, parameter), menuItem.PerformClick);
+        }
+
+        private sealed class TestToolBar : ToolBar
+        {
+            public void PerformButtonClick(ToolBarButton button)
+                => OnButtonClick(new ToolBarButtonClickEventArgs(button));
+        }
+
+        [Fact]
+        public void ExecuteToolBarButtonTest()
+        {
+            using var toolBar = new TestToolBar();
+            using var dummy1 = new ToolBarButton();
+            using var dummy2 = new ToolBarButton();
+            using var button = new ToolBarButton();
+            toolBar.Buttons.AddRange([dummy1, button, dummy2]);
+            ExecuteTest((command, parameter) => { dummy1.SetCommand(command, parameter); button.SetCommand(command, parameter); }
+                , () => { toolBar.PerformButtonClick(button); toolBar.PerformButtonClick(dummy2); });
+        }
+#endif
     }
 
     public class CommandHandlerTest_UICommand : IDisposable

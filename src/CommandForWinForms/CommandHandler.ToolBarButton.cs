@@ -39,9 +39,9 @@ namespace CommandForWinForms
                     OnExecute(sender, EventArgs.Empty);
             }
 
-            protected override bool Available => _button.Visible;
+            protected override bool Available => _parent.Visible;
 
-            protected override Control? SourceControl => _button.Parent;
+            protected override Control? SourceControl => _parent;
 
             protected override void SetEnabled(bool enabled)
                 => _button.Enabled = enabled;

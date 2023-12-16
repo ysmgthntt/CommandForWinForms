@@ -168,6 +168,22 @@ namespace CommandForWinForms.Tests
             Assert.Throws<ArgumentNullException>("item", () => ControlCommandProperties.SetCommand((ToolStripItem)null, null));
         }
 
+#if NETFRAMEWORK
+        [Fact]
+        public void GetSetCommandMenuItemNullTest()
+        {
+            Assert.Throws<ArgumentNullException>("menuItem", () => ControlCommandProperties.GetCommand((MenuItem)null));
+            Assert.Throws<ArgumentNullException>("menuItem", () => ControlCommandProperties.SetCommand((MenuItem)null, null));
+        }
+
+        [Fact]
+        public void GetSetCommandToolBarButtonNullTest()
+        {
+            Assert.Throws<ArgumentNullException>("button", () => ControlCommandProperties.GetCommand((ToolBarButton)null));
+            Assert.Throws<ArgumentNullException>("button", () => ControlCommandProperties.SetCommand((ToolBarButton)null, null));
+        }
+#endif
+
         [Fact]
         public void GetSetCommandButtonTest()
         {
@@ -245,6 +261,88 @@ namespace CommandForWinForms.Tests
             Assert.Null(button1.GetCommand());
             Assert.Null(button2.GetCommand());
         }
+
+#if NETFRAMEWORK
+        [Fact]
+        public void GetSetCommandMenuItemTest()
+        {
+            using var menuItem1 = new MenuItem();
+            using var menuItem2 = new MenuItem();
+
+            Assert.Null(menuItem1.GetCommand());
+            Assert.Null(menuItem2.GetCommand());
+
+            var command1 = new TestCommand();
+            menuItem1.SetCommand(command1);
+
+            Assert.Equal(command1, menuItem1.GetCommand());
+            Assert.Null(menuItem2.GetCommand());
+
+            var command2 = new TestCommand();
+            menuItem2.SetCommand(null);
+            menuItem2.SetCommand(command2);
+
+            Assert.Equal(command1, menuItem1.GetCommand());
+            Assert.Equal(command2, menuItem2.GetCommand());
+
+            menuItem1.SetCommand(command2);
+
+            Assert.Equal(command2, menuItem1.GetCommand());
+            Assert.Equal(command2, menuItem2.GetCommand());
+
+            menuItem2.SetCommand(null);
+
+            Assert.Equal(command2, menuItem1.GetCommand());
+            Assert.Null(menuItem2.GetCommand());
+
+            menuItem1.SetCommand(null);
+            menuItem2.SetCommand(null);
+
+            Assert.Null(menuItem1.GetCommand());
+            Assert.Null(menuItem2.GetCommand());
+        }
+
+        [Fact]
+        public void GetSetCommandToolBarButtonTest()
+        {
+            using var toolBar = new ToolBar();
+            using var button1 = new ToolBarButton();
+            using var button2 = new ToolBarButton();
+            toolBar.Buttons.AddRange([button1, button2]);
+
+            Assert.Null(button1.GetCommand());
+            Assert.Null(button2.GetCommand());
+
+            var command1 = new TestCommand();
+            button1.SetCommand(command1);
+
+            Assert.Equal(command1, button1.GetCommand());
+            Assert.Null(button2.GetCommand());
+
+            var command2 = new TestCommand();
+            button2.SetCommand(null);
+            button2.SetCommand(command2);
+
+            Assert.Equal(command1, button1.GetCommand());
+            Assert.Equal(command2, button2.GetCommand());
+
+            button1.SetCommand(command2);
+
+            Assert.Equal(command2, button1.GetCommand());
+            Assert.Equal(command2, button2.GetCommand());
+
+            button2.SetCommand(null);
+
+            Assert.Equal(command2, button1.GetCommand());
+            Assert.Null(button2.GetCommand());
+
+            button1.SetCommand(null);
+            button2.SetCommand(null);
+
+            Assert.Null(button1.GetCommand());
+            Assert.Null(button2.GetCommand());
+        }
+#endif
     }
 
     public class ControlCommandPropertiesTest_UICommand : IDisposable

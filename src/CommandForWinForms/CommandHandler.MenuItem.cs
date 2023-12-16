@@ -30,7 +30,8 @@ namespace CommandForWinForms
                 _menuItem.Disposed += MenuItem_Disposed;
             }
 
-            protected override bool Available => _menuItem.Visible;
+            // VisibleChanged がないため制御しない。
+            //protected override bool Available => _menuItem.Visible;
 
             protected override void SetEnabled(bool enabled)
                 => _menuItem.Enabled = enabled;
