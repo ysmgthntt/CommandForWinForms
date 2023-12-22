@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CommandForWinForms
 {
@@ -39,11 +40,19 @@ namespace CommandForWinForms
 
         // ICommand
 
-        private readonly WeakEventHandler _canExecuteChanged = new();
+        private EventHandler? _canExecuteChanged;
         public event EventHandler? CanExecuteChanged
         {
-            add => _canExecuteChanged.AddHandler(value);
-            remove => _canExecuteChanged.RemoveHandler(value);
+            add
+            {
+                _canExecuteChanged += value;
+                if (value?.Target is IComponent component)
+                    component.Disposed += (s, e) => _canExecuteChanged -= value;
+            }
+            remove
+            {
+                _canExecuteChanged -= value;
+            }
         }
 
         bool ICommand.CanExecute(object? parameter)
@@ -116,7 +125,7 @@ namespace CommandForWinForms
 
         internal void RaiseCanExecuteChanged()
         {
-            if (!_canExecuteChanged.IsEmpty)
+            if (_canExecuteChanged is not null)
             {
                 _inRaiseCanExecuteChanged = true;
                 _lastCanExecuteParameter = null;

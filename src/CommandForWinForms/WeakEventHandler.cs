@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿#if false
+using System.Runtime.CompilerServices;
 
 namespace CommandForWinForms
 {
@@ -84,3 +85,4 @@ namespace CommandForWinForms
 #endif
     }
 }
+#endif
