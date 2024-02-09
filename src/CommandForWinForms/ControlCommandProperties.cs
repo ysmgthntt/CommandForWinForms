@@ -84,7 +84,11 @@ namespace CommandForWinForms
             {
                 if (_commands.TryGetValue(component, out var old))
                 {
-                    old?.DetachEvents();
+                    if (old is not null)
+                    {
+                        old.DetachEvents();
+                        old.SetEnabled(true);
+                    }
                 }
                 else
                 {
@@ -95,6 +99,7 @@ namespace CommandForWinForms
             }
             _commands[component] = commandHandler;
             _allUICommands = null;
+            commandHandler?.UpdateCanExecute();
         }
 
         private static HashSet<UICommandBase>? _allUICommands;

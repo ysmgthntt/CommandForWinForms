@@ -343,6 +343,96 @@ namespace CommandForWinForms.Tests
             Assert.Null(button2.GetCommand());
         }
 #endif
+
+        [Fact]
+        public void UpdateEnabledOnSetCommandButtonTest()
+        {
+            using var button = new Button();
+            var command1 = new TestCommand(_ => { }, _ => false);
+            var command2 = new TestCommand(_ => { }, _ => true);
+
+            Assert.True(button.Enabled);
+
+            button.SetCommand(command1);
+            Assert.False(button.Enabled);
+            button.SetCommand(null);
+            Assert.True(button.Enabled);
+
+            button.SetCommand(command2);
+            Assert.True(button.Enabled);
+            button.SetCommand(null);
+            Assert.True(button.Enabled);
+        }
+
+        [Fact]
+        public void UpdateEnabledOnSetCommandToolStripItemTest()
+        {
+            using var parent = new ToolStrip();
+            using var button = new ToolStripButton();
+            // Visible を true にする。
+            parent.Items.Add(button);
+            parent.PerformLayout();
+
+            var command1 = new TestCommand(_ => { }, _ => false);
+            var command2 = new TestCommand(_ => { }, _ => true);
+
+            Assert.True(button.Enabled);
+
+            button.SetCommand(command1);
+            Assert.False(button.Enabled);
+            button.SetCommand(null);
+            Assert.True(button.Enabled);
+
+            button.SetCommand(command2);
+            Assert.True(button.Enabled);
+            button.SetCommand(null);
+            Assert.True(button.Enabled);
+        }
+
+#if NETFRAMEWORK
+        [Fact]
+        public void UpdateEnabledOnSetCommandMenuItemTest()
+        {
+            using var menuItem = new MenuItem();
+            var command1 = new TestCommand(_ => { }, _ => false);
+            var command2 = new TestCommand(_ => { }, _ => true);
+
+            Assert.True(menuItem.Enabled);
+
+            menuItem.SetCommand(command1);
+            Assert.False(menuItem.Enabled);
+            menuItem.SetCommand(null);
+            Assert.True(menuItem.Enabled);
+
+            menuItem.SetCommand(command2);
+            Assert.True(menuItem.Enabled);
+            menuItem.SetCommand(null);
+            Assert.True(menuItem.Enabled);
+        }
+
+        [Fact]
+        public void UpdateEnabledOnSetCommandToolBarButtonTest()
+        {
+            using var parent = new ToolBar();
+            using var button = new ToolBarButton();
+            parent.Buttons.Add(button);
+
+            var command1 = new TestCommand(_ => { }, _ => false);
+            var command2 = new TestCommand(_ => { }, _ => true);
+
+            Assert.True(button.Enabled);
+
+            button.SetCommand(command1);
+            Assert.False(button.Enabled);
+            button.SetCommand(null);
+            Assert.True(button.Enabled);
+
+            button.SetCommand(command2);
+            Assert.True(button.Enabled);
+            button.SetCommand(null);
+            Assert.True(button.Enabled);
+        }
+#endif
     }
 
     public class ControlCommandPropertiesTest_UICommand : IDisposable
@@ -371,11 +461,11 @@ namespace CommandForWinForms.Tests
             using var parent = new Control();
             parent.Controls.AddRange([button1, button2, button3, button4, button5, button6]);
 
+            int canExecute1 = 0, canExecute2 = 0, canExecute3 = 0;
             var command1 = new UICommand("command1", "command1");
             var command2 = new UICommand("command2", "command2");
-            var command3 = new TestCommand(_ => Assert.Fail("not UICommand"), _ => { Assert.Fail("not UICommand"); return false; });
+            var command3 = new TestCommand(_ => Assert.Fail("not UICommand"), _ => { canExecute3++; return false; });
 
-            int canExecute1 = 0, canExecute2 = 0;
             parent.GetCommandBindings().Add(new CommandBinding(command1, null, (_, _) => canExecute1++));
             parent.GetCommandBindings().Add(new CommandBinding(command2, null, (_, _) => canExecute2++));
 
@@ -386,20 +476,26 @@ namespace CommandForWinForms.Tests
             button5.SetCommand(command2, null, parent);
             button6.SetCommand(command3, null, parent);
 
-            ControlCommandProperties.RaiseCanExecuteChangedAllUICommands();
-            Assert.Equal(1, canExecute1);
-            Assert.Equal(1, canExecute2);
-            ControlCommandProperties.RaiseCanExecuteChangedAllUICommands();
             Assert.Equal(2, canExecute1);
             Assert.Equal(2, canExecute2);
+            Assert.Equal(2, canExecute3);
 
-            button2.SetCommand(command3);
             ControlCommandProperties.RaiseCanExecuteChangedAllUICommands();
             Assert.Equal(3, canExecute1);
             Assert.Equal(3, canExecute2);
             ControlCommandProperties.RaiseCanExecuteChangedAllUICommands();
             Assert.Equal(4, canExecute1);
             Assert.Equal(4, canExecute2);
+
+            button2.SetCommand(command3);
+            Assert.Equal(3, canExecute3);
+            ControlCommandProperties.RaiseCanExecuteChangedAllUICommands();
+            Assert.Equal(5, canExecute1);
+            Assert.Equal(5, canExecute2);
+            ControlCommandProperties.RaiseCanExecuteChangedAllUICommands();
+            Assert.Equal(6, canExecute1);
+            Assert.Equal(6, canExecute2);
+            Assert.Equal(3, canExecute3);
         }
     }
 }

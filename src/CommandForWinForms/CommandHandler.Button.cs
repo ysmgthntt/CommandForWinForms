@@ -36,7 +36,7 @@
 
             protected override Control? SourceControl => _button;
 
-            protected override void SetEnabled(bool enabled)
+            public override void SetEnabled(bool enabled)
                 => _button.Enabled = enabled;
 
             protected override void DetachComponentEvents()

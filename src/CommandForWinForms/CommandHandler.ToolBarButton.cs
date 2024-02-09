@@ -43,7 +43,7 @@ namespace CommandForWinForms
 
             protected override Control? SourceControl => _parent;
 
-            protected override void SetEnabled(bool enabled)
+            public override void SetEnabled(bool enabled)
                 => _button.Enabled = enabled;
 
             protected override void DetachComponentEvents()

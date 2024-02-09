@@ -181,9 +181,8 @@ namespace CommandForWinForms.Tests
                 canExecuteCount++;
                 return enabled;
             });
-            button.SetCommand(command);
 
-            command.RaiseCanExecuteChanged();
+            button.SetCommand(command);
             Assert.Equal(1, enabledCount);
             Assert.Equal(1, canExecuteCount);
             enabled = true;
@@ -224,9 +223,8 @@ namespace CommandForWinForms.Tests
                 canExecuteCount++;
                 return enabled;
             });
-            button.SetCommand(command);
 
-            command.RaiseCanExecuteChanged();
+            button.SetCommand(command);
             Assert.Equal(1, enabledCount);
             Assert.Equal(1, canExecuteCount);
             enabled = true;
@@ -258,9 +256,8 @@ namespace CommandForWinForms.Tests
                 canExecuteCount++;
                 return enabled;
             });
-            menuItem.SetCommand(command);
 
-            command.RaiseCanExecuteChanged();
+            menuItem.SetCommand(command);
             Assert.False(menuItem.Enabled);
             Assert.Equal(1, canExecuteCount);
             enabled = true;
@@ -285,6 +282,7 @@ namespace CommandForWinForms.Tests
             using var button = new ToolBarButton();
             parent.Buttons.Add(button);
 
+            Assert.True(parent.Visible);
             Assert.True(button.Visible);
             Assert.True(button.Enabled);
             bool enabled = false;
@@ -294,9 +292,8 @@ namespace CommandForWinForms.Tests
                 canExecuteCount++;
                 return enabled;
             });
-            button.SetCommand(command);
 
-            command.RaiseCanExecuteChanged();
+            button.SetCommand(command);
             Assert.False(button.Enabled);
             Assert.Equal(1, canExecuteCount);
             enabled = true;
@@ -332,23 +329,24 @@ namespace CommandForWinForms.Tests
                 });
 
             setCommand(command1, null);
+            executeCount1 = canExecuteCount1 = 0;
             click();
             Assert.Equal(1, executeCount1);
             Assert.Equal(1, canExecuteCount1);
-            executeCount1 = canExecuteCount1 = 0;
             setCommand(command1, null);
+            executeCount1 = canExecuteCount1 = 0;
             click();
             Assert.Equal(1, executeCount1);
             Assert.Equal(1, canExecuteCount1);
 
             parameter = new object();
-            executeCount1 = canExecuteCount1 = 0;
             setCommand(command1, parameter);
+            executeCount1 = canExecuteCount1 = 0;
             click();
             Assert.Equal(1, executeCount1);
             Assert.Equal(1, canExecuteCount1);
-            executeCount1 = canExecuteCount1 = 0;
             setCommand(command1, parameter);
+            executeCount1 = canExecuteCount1 = 0;
             click();
             Assert.Equal(1, executeCount1);
             Assert.Equal(1, canExecuteCount1);
@@ -367,8 +365,8 @@ namespace CommandForWinForms.Tests
                     return true;
                 });
 
-            executeCount1 = canExecuteCount1 = executeCount2 = canExecuteCount2 = 0;
             setCommand(command2, parameter);
+            executeCount1 = canExecuteCount1 = executeCount2 = canExecuteCount2 = 0;
             click();
             Assert.Equal(0, executeCount1);
             Assert.Equal(0, canExecuteCount1);
@@ -376,8 +374,8 @@ namespace CommandForWinForms.Tests
             Assert.Equal(1, canExecuteCount2);
 
             parameter = null;
-            executeCount1 = canExecuteCount1 = executeCount2 = canExecuteCount2 = 0;
             setCommand(command2, null);
+            executeCount1 = canExecuteCount1 = executeCount2 = canExecuteCount2 = 0;
             click();
             Assert.Equal(0, executeCount1);
             Assert.Equal(0, canExecuteCount1);
@@ -590,12 +588,13 @@ namespace CommandForWinForms.Tests
                 parent.GetCommandBindings().Add(new CommandBinding(command, (s, e) => { onExecuted(s, e); parentExecuted++; }, (s, e) => { onCanExecute(s, e); parentCanExecute++; }));
                 child.GetCommandBindings().Add(new CommandBinding(command, (s, e) => { onExecuted(s, e); childExecuted++; }, (s, e) => { onCanExecute(s, e); childCanExecute++; }));
 
-                button.SetCommand(command, parameter);
-                buttonWithTarget.SetCommand(command, parameter, target);
-
                 selected.Select();
                 Assert.Equal(selected, form.GetActiveControl());
 
+                button.SetCommand(command, parameter);
+                buttonWithTarget.SetCommand(command, parameter, target);
+
+                parentExecuted = childExecuted = parentCanExecute = childCanExecute = 0;
                 button.PerformClick();
                 Assert.Equal(1, parentCanExecute);
                 Assert.Equal(1, parentExecuted);

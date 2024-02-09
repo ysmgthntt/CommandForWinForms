@@ -20,7 +20,7 @@ namespace CommandForWinForms.Tests
         public bool CanExecute(object? parameter)
         {
             if (_canExecute is null)
-                throw new InvalidOperationException();
+                return false;
             return _canExecute(parameter);
         }
 

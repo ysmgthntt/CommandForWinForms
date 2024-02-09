@@ -23,9 +23,12 @@
 
             private Control? GetTarget() => _target ?? SourceControl?.FindForm()?.GetActiveControl();
 
-            protected abstract void SetEnabled(bool enabled);
+            public abstract void SetEnabled(bool enabled);
 
             protected void OnCanExecuteChanged(object? sender, EventArgs e)
+                => UpdateCanExecute();
+
+            public void UpdateCanExecute()
             {
                 if (!Available)
                     return;
