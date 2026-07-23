@@ -18,17 +18,18 @@ namespace WinFormsAppNet8
             new CommandManager(this);
 
             toolStripButtonCommand1.SetCommand(Sample);
+            // Command property (.NET 7)
             toolStripButtonCommand2.Command = Sample;
 
             toolStripButtonClose.SetCommand(ApplicationCommands.Close);
             ApplicationCommands.Close.InputGestures.Add(new KeyGesture(Keys.Escape));
-            this.GetCommandBindings().Add(new CommandBinding(ApplicationCommands.Close, (s, e) => Close()));
+            this.CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, (s, e) => Close()));
 
             //this.GetCommandBindings().Add(new CommandBinding(Sample, Form1_CommandExecuted));
-            panel1.GetCommandBindings().Add(new CommandBinding(Sample, Panel1_CommandExecuted));
-            panel2.GetCommandBindings().Add(new CommandBinding(Sample, Panel2_CommandExecuted));
+            panel1.CommandBindings.Add(new CommandBinding(Sample, Panel1_CommandExecuted));
+            panel2.CommandBindings.Add(new CommandBinding(Sample, Panel2_CommandExecuted));
 
-            this.GetCommandBindings().Add(new CommandBinding(Switch, Switch_CommandExecuted));
+            this.CommandBindings.Add(new CommandBinding(Switch, Switch_CommandExecuted));
         }
 
         private void Form1_CommandExecuted(object? sender, ExecutedEventArgs e)
