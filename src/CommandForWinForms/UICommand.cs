@@ -9,8 +9,8 @@
         public UICommand(string text, string name, IList<InputGesture>? inputGestures = null)
             : base(inputGestures)
         {
-            ANE.ThrowIfNullOrEmpty(name);
-            ANE.ThrowIfNull(text);
+            ArgumentNullException.ThrowIfNullOrEmpty(name);
+            ArgumentNullException.ThrowIfNull(text);
 
             Name = name;
             Text = text;

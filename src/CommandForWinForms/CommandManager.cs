@@ -8,7 +8,7 @@ namespace CommandForWinForms
     {
         public CommandManager(Form form)
         {
-            ANE.ThrowIfNull(form);
+            ArgumentNullException.ThrowIfNull(form);
 
             Initialize(form, Control_GotFocus, Control_KeyDown, Control_ControlAdded);
         }

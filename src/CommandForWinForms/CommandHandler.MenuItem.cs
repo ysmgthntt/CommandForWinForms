@@ -5,13 +5,13 @@ namespace CommandForWinForms
     {
         public static ICommand? GetCommand(this MenuItem menuItem)
         {
-            ANE.ThrowIfNull(menuItem);
+            ArgumentNullException.ThrowIfNull(menuItem);
             return GetCommandCore(menuItem);
         }
 
         public static void SetCommand(this MenuItem menuItem, ICommand? command, object? parameter = null, Control? target = null)
         {
-            ANE.ThrowIfNull(menuItem);
+            ArgumentNullException.ThrowIfNull(menuItem);
 
             var handler = (command is not null) ? new MenuItemCommandHandler(menuItem, command, parameter, target) : null;
             SetCommandCore(menuItem, handler);

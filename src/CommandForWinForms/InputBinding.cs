@@ -15,15 +15,15 @@
             get => _gesture;
             set
             {
-                ANE.ThrowIfNull(value);
+                ArgumentNullException.ThrowIfNull(value);
                 _gesture = value;
             }
         }
 
         public InputBinding(ICommand command, InputGesture gesture)
         {
-            ANE.ThrowIfNull(command);
-            ANE.ThrowIfNull(gesture);
+            ArgumentNullException.ThrowIfNull(command);
+            ArgumentNullException.ThrowIfNull(gesture);
 
             Command = command;
             _gesture = gesture;

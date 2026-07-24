@@ -17,7 +17,7 @@
 
         public KeyGesture(Keys key, ModifierKeys modifiers, string displayString = "")
         {
-            ANE.ThrowIfNull(displayString);
+            ArgumentNullException.ThrowIfNull(displayString);
 
             Key = key;
             Modifiers = modifiers;

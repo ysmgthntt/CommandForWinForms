@@ -11,7 +11,7 @@ namespace CommandForWinForms
             get => _command;
             set
             {
-                ANE.ThrowIfNull(value);
+                ArgumentNullException.ThrowIfNull(value);
                 _command = value;
             }
         }
@@ -24,7 +24,7 @@ namespace CommandForWinForms
 
         public CommandBinding(ICommand command, EventHandler<ExecutedEventArgs>? executed = null, EventHandler<CanExecuteEventArgs>? canExecute = null)
         {
-            ANE.ThrowIfNull(command);
+            ArgumentNullException.ThrowIfNull(command);
 
             _command = command;
             Executed = executed;

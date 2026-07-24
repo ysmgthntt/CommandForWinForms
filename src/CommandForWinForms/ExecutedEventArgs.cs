@@ -7,7 +7,7 @@
 
         internal ExecutedEventArgs(ICommand command, object? parameter)
         {
-            ANE.ThrowIfNull(command);
+            ArgumentNullException.ThrowIfNull(command);
 
             Command = command;
             Parameter = parameter;

@@ -4,13 +4,13 @@
     {
         public static ICommand? GetCommand(this ToolStripItem item)
         {
-            ANE.ThrowIfNull(item);
+            ArgumentNullException.ThrowIfNull(item);
             return GetCommandCore(item);
         }
 
         public static void SetCommand(this ToolStripItem item, ICommand? command, object? parameter = null, Control? target = null)
         {
-            ANE.ThrowIfNull(item);
+            ArgumentNullException.ThrowIfNull(item);
             if (item.IsDisposed)
                 ThrowObjectDisposedException(item.Name);
 

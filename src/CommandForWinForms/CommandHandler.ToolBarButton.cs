@@ -5,13 +5,13 @@ namespace CommandForWinForms
     {
         public static ICommand? GetCommand(this ToolBarButton button)
         {
-            ANE.ThrowIfNull(button);
+            ArgumentNullException.ThrowIfNull(button);
             return GetCommandCore(button);
         }
 
         public static void SetCommand(this ToolBarButton button, ICommand? command, object? parameter = null, Control? target = null)
         {
-            ANE.ThrowIfNull(button);
+            ArgumentNullException.ThrowIfNull(button);
 
             var handler = (command is not null) ? new ToolBarButtonCommandHandler(button, command, parameter, target) : null;
             SetCommandCore(button, handler);

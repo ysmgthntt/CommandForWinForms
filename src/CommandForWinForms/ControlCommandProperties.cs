@@ -11,7 +11,7 @@ namespace CommandForWinForms
 
             public static IList<T> GetOrCreate(Control control)
             {
-                ANE.ThrowIfNull(control);
+                ArgumentNullException.ThrowIfNull(control);
                 if (control.IsDisposed)
                     ThrowObjectDisposedException(control.Name);
 

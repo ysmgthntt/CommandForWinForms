@@ -4,13 +4,13 @@
     {
         public static ICommand? GetCommand(this ButtonBase button)
         {
-            ANE.ThrowIfNull(button);
+            ArgumentNullException.ThrowIfNull(button);
             return GetCommandCore(button);
         }
 
         public static void SetCommand(this ButtonBase button, ICommand? command, object? parameter = null, Control? target = null)
         {
-            ANE.ThrowIfNull(button);
+            ArgumentNullException.ThrowIfNull(button);
             if (button.IsDisposed)
                 ThrowObjectDisposedException(button.Name);
 
