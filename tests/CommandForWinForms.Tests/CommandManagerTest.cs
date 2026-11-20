@@ -28,7 +28,7 @@ namespace CommandForWinForms.Tests
             using var control2 = new ProcessInputTestControl() { Name = "control2" };
 
             form.Controls.Add(control1);
-            new CommandManager(form);
+            CommandManager.Initialize(form);
             control1.Controls.Add(control2);
 
             Assert.False(control2.RaiseKeyDown(Keys.A));
@@ -301,7 +301,7 @@ namespace CommandForWinForms.Tests
             using var form = new Form();
             using var control = new ProcessInputTestControl();
             form.Controls.Add(control);
-            new CommandManager(form);
+            CommandManager.Initialize(form);
             var parameter = new object();
             int executeCount = 0;
             int canExecuteCount = 0;

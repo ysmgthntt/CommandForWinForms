@@ -15,7 +15,7 @@ namespace WinFormsAppNet8
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            new CommandManager(this);
+            CommandManager.Initialize(this);
 
             toolStripButtonCommand1.SetCommand(Sample);
             // Command property (.NET 7)

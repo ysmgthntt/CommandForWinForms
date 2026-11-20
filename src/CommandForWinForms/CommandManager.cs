@@ -8,23 +8,22 @@ namespace CommandForWinForms
     /// Manages command processing for a form.
     /// </summary>
     /// <remarks>
-    /// Creating an instance of this class for a form enables command-related functionality
-    /// provided by CommandForWinForms within that form.
+    /// This class provides static methods to initialize and manage command processing for a form and its controls.
     /// </remarks>
-    public sealed class CommandManager
+    public static class CommandManager
     {
         /// <summary>
-        /// Initializes command handling for the specified form and its controls.
+        /// Initializes command handling for a form.
         /// </summary>
-        /// <param name="form">The form whose controls are monitored for command input.</param>
-        public CommandManager(Form form)
+        /// <param name="form">The form to initialize.</param>
+        public static void Initialize(Form form)
         {
             ArgumentNullException.ThrowIfNull(form);
 
             Initialize(form, Control_GotFocus, Control_KeyDown, Control_ControlAdded);
         }
 
-        private void Initialize(Control control, EventHandler onGotFocus, KeyEventHandler onKeyDown, ControlEventHandler onControlAdded)
+        private static void Initialize(Control control, EventHandler onGotFocus, KeyEventHandler onKeyDown, ControlEventHandler onControlAdded)
         {
             if (control is not (Label or ContainerControl or Panel or GroupBox or Splitter or ProgressBar))
             {
@@ -43,18 +42,18 @@ namespace CommandForWinForms
             }
         }
 
-        private void Control_GotFocus(object? sender, EventArgs e)
+        private static void Control_GotFocus(object? sender, EventArgs e)
         {
             InvalidateRequerySuggested();
         }
 
-        private void Control_KeyDown(object? sender, KeyEventArgs e)
+        private static void Control_KeyDown(object? sender, KeyEventArgs e)
         {
             if (!e.Handled)
                 e.SuppressKeyPress = ProcessInput((Control?)sender, e);
         }
 
-        private void Control_ControlAdded(object? sender, ControlEventArgs e)
+        private static void Control_ControlAdded(object? sender, ControlEventArgs e)
         {
             var control = e.Control;
             if (control is not null)
