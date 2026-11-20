@@ -3,16 +3,44 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace CommandForWinForms
 {
+    /// <summary>
+    /// Provides the base class for commands that can be associated with user interface elements.
+    /// </summary>
+    /// <remarks>
+    /// A command can define its name, display text, and input gestures.
+    /// It also provides methods to determine whether the command can be executed
+    /// and to execute the command against a specified target control.
+    /// </remarks>
     public abstract class UICommandBase : ICommand
     {
+        /// <summary>
+        /// Gets the name of the command.
+        /// </summary>
         public abstract string Name { get; }
 
+        /// <summary>
+        /// Gets the display text of the command.
+        /// </summary>
         public abstract string Text { get; }
 
         private IList<InputGesture>? _inputGestures;
 
+        /// <summary>
+        /// Gets the collection of input gestures associated with this command.
+        /// </summary>
+        /// <remarks>
+        /// If no input gestures were specified during initialization, <see cref="CreateInputGestures"/> is called
+        /// the first time this property is accessed. If that method returns <see langword="null"/>,
+        /// an empty collection is used.
+        /// </remarks>
         public IList<InputGesture> InputGestures => _inputGestures ??= (CreateInputGestures() ?? []);
 
+        /// <summary>
+        /// Creates the default collection of input gestures for the command.
+        /// </summary>
+        /// <returns>
+        /// The default input gestures, or <see langword="null"/> if no default input gestures are defined.
+        /// </returns>
         protected virtual IList<InputGesture>? CreateInputGestures() => null;
 
         internal bool TryGetInputGestures([NotNullWhen(true)] out IList<InputGesture>? inputGestures)
@@ -31,8 +59,19 @@ namespace CommandForWinForms
             return false;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UICommandBase"/> class.
+        /// </summary>
         protected UICommandBase() { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UICommandBase"/> class
+        /// with the specified input gestures.
+        /// </summary>
+        /// <param name="inputGestures">
+        /// The input gestures associated with the command.
+        /// If <see langword="null"/>, the default input gestures are created when <see cref="InputGestures"/> is first accessed.
+        /// </param>
         protected UICommandBase(IList<InputGesture>? inputGestures)
         {
             _inputGestures = inputGestures;
@@ -41,6 +80,10 @@ namespace CommandForWinForms
         // ICommand
 
         private EventHandler? _canExecuteChanged;
+
+        /// <summary>
+        /// Occurs when changes occur that affect whether the command can be executed.
+        /// </summary>
         public event EventHandler? CanExecuteChanged
         {
             add
@@ -69,6 +112,14 @@ namespace CommandForWinForms
         private Control? _lastCanExecuteTarget;
         private bool _lastCanExecuteResult;
 
+        /// <summary>
+        /// Determines whether the command can be executed with the specified parameter and target control.
+        /// </summary>
+        /// <param name="parameter">The parameter passed to the command.</param>
+        /// <param name="target">The target control, or <see langword="null"/> to use the active control.</param>
+        /// <returns>
+        /// <see langword="true"/> if the command can be executed; otherwise, <see langword="false"/>.
+        /// </returns>
         public bool CanExecute(object? parameter, Control? target)
         {
             target ??= GetActiveControl();
@@ -143,6 +194,11 @@ namespace CommandForWinForms
             }
         }
 
+        /// <summary>
+        /// Executes the command with the specified parameter and target control.
+        /// </summary>
+        /// <param name="parameter">The parameter passed to the command.</param>
+        /// <param name="target">The target control, or <see langword="null"/> to use the active control.</param>
         public void Execute(object? parameter, Control? target)
         {
             target ??= GetActiveControl();

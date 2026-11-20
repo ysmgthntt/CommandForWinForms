@@ -3,6 +3,15 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace CommandForWinForms
 {
+    /// <summary>
+    /// Provides methods and properties for associating commands and input bindings with controls.
+    /// </summary>
+    /// <remarks>
+    /// Commands can be assigned to <see cref="System.Windows.Forms.ButtonBase"/> and
+    /// <see cref="System.Windows.Forms.ToolStripItem"/> instances.
+    /// Command bindings and input bindings can be associated with any
+    /// <see cref="System.Windows.Forms.Control"/>.
+    /// </remarks>
     public static partial class ControlCommandProperties
     {
         private static class CollectionHolder<T>
@@ -33,9 +42,19 @@ namespace CommandForWinForms
             }
         }
 
+        /// <summary>
+        /// Gets the collection of command bindings associated with the specified control.
+        /// </summary>
+        /// <param name="control">The control whose command bindings are retrieved.</param>
+        /// <returns>The collection of command bindings associated with the control.</returns>
         public static IList<CommandBinding> GetCommandBindings(this Control control)
             => CollectionHolder<CommandBinding>.GetOrCreate(control);
 
+        /// <summary>
+        /// Gets the collection of input bindings associated with the specified control.
+        /// </summary>
+        /// <param name="control">The control whose input bindings are retrieved.</param>
+        /// <returns>The collection of input bindings associated with the control.</returns>
         public static IList<InputBinding> GetInputBindings(this Control control)
             => CollectionHolder<InputBinding>.GetOrCreate(control);
 

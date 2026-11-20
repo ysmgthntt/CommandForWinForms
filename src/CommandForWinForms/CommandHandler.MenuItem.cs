@@ -3,12 +3,24 @@ namespace CommandForWinForms
 {
     partial class ControlCommandProperties
     {
+        /// <summary>
+        /// Gets the command associated with a menu item.
+        /// </summary>
+        /// <param name="menuItem">The menu item whose command is returned.</param>
+        /// <returns>The associated command, or <see langword="null"/> if none is assigned.</returns>
         public static ICommand? GetCommand(this MenuItem menuItem)
         {
             ArgumentNullException.ThrowIfNull(menuItem);
             return GetCommandCore(menuItem);
         }
 
+        /// <summary>
+        /// Associates a command with a menu item and updates its enabled state as the command changes.
+        /// </summary>
+        /// <param name="menuItem">The menu item associated with the command.</param>
+        /// <param name="command">The command to associate, or <see langword="null"/> to remove the association.</param>
+        /// <param name="parameter">The parameter passed to the command.</param>
+        /// <param name="target">The command target, or <see langword="null"/> to use the active control.</param>
         public static void SetCommand(this MenuItem menuItem, ICommand? command, object? parameter = null, Control? target = null)
         {
             ArgumentNullException.ThrowIfNull(menuItem);

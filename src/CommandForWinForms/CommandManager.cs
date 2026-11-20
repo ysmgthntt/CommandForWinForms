@@ -4,8 +4,19 @@ using System.Runtime.InteropServices;
 
 namespace CommandForWinForms
 {
+    /// <summary>
+    /// Manages command processing for a form.
+    /// </summary>
+    /// <remarks>
+    /// Creating an instance of this class for a form enables command-related functionality
+    /// provided by CommandForWinForms within that form.
+    /// </remarks>
     public sealed class CommandManager
     {
+        /// <summary>
+        /// Initializes command handling for the specified form and its controls.
+        /// </summary>
+        /// <param name="form">The form whose controls are monitored for command input.</param>
         public CommandManager(Form form)
         {
             ArgumentNullException.ThrowIfNull(form);
@@ -112,6 +123,13 @@ namespace CommandForWinForms
 
         private static bool _requerySuggested;
 
+        /// <summary>
+        /// Schedules a refresh of the enabled state of commands that support requery.
+        /// </summary>
+        /// <remarks>
+        /// Raises the <see cref="UICommandBase.CanExecuteChanged"/> event
+        /// for all existing <see cref="UICommandBase"/> instances.
+        /// </remarks>
         public static void InvalidateRequerySuggested()
         {
             if (!_requerySuggested)

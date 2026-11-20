@@ -8,6 +8,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>15.0</LangVersion>
     <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
