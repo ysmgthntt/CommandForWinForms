@@ -323,6 +323,84 @@ namespace CommandForWinForms.Tests
             Assert.Equal(1, canExecuteCount);
         }
 
+        [Theory]
+        [InlineData(MouseButtons.Left, 1, MouseAction.LeftClick)]
+        [InlineData(MouseButtons.Right, 1, MouseAction.RightClick)]
+        [InlineData(MouseButtons.Middle, 1, MouseAction.MiddleClick)]
+        [InlineData(MouseButtons.Left, 2, MouseAction.LeftDoubleClick)]
+        [InlineData(MouseButtons.Right, 2, MouseAction.RightDoubleClick)]
+        [InlineData(MouseButtons.Middle, 2, MouseAction.MiddleDoubleClick)]
+        [InlineData(MouseButtons.Left, 3, MouseAction.LeftClick)]
+        [InlineData(MouseButtons.Right, 3, MouseAction.RightClick)]
+        [InlineData(MouseButtons.Middle, 3, MouseAction.MiddleClick)]
+        [InlineData(MouseButtons.None, 1, MouseAction.None)]
+        [InlineData(MouseButtons.XButton1, 1, MouseAction.None)]
+        [InlineData(MouseButtons.XButton2, 1, MouseAction.None)]
+        public void ProcessMouseClickInputBindingTest(MouseButtons button, int clicks, MouseAction mouseAction)
+        {
+            using var form = new Form();
+            using var parent = new ProcessInputTestControl();
+            using var child = new ProcessInputTestControl();
+            form.Controls.Add(parent);
+            parent.Controls.Add(child);
+            CommandManager.Initialize(form);
+
+            var parameter = new object();
+            int executeCount = 0;
+            var command = new TestCommand(p =>
+            {
+                Assert.Same(parameter, p);
+                executeCount++;
+            }, _ => true);
+            parent.GetInputBindings().Add(new MouseBinding(command, mouseAction) { CommandParameter = parameter });
+
+            child.RaiseMouseClick(MouseButtons.None, 0);
+            Assert.Equal(0, executeCount);
+
+            child.RaiseMouseClick(button, clicks);
+            Assert.Equal(mouseAction == MouseAction.None ? 0 : 1, executeCount);
+        }
+
+        [Fact]
+        public void ProcessMouseWheelInputBindingTest()
+        {
+            using var form = new Form();
+            using var control = new ProcessInputTestControl();
+            form.Controls.Add(control);
+            CommandManager.Initialize(form);
+
+            int executeCount = 0;
+            var command = new TestCommand(_ => executeCount++, _ => true);
+            control.GetInputBindings().Add(new MouseBinding(command, MouseAction.WheelClick));
+
+            Assert.True(control.RaiseMouseWheel(120));
+            Assert.Equal(1, executeCount);
+
+            control.GetInputBindings().Clear();
+            control.GetInputBindings().Add(new MouseBinding(command, MouseAction.LeftClick));
+            Assert.False(control.RaiseMouseWheel(120));
+            Assert.Equal(1, executeCount);
+        }
+
+        [Fact]
+        public void ProcessMouseClickCommandBindingTest()
+        {
+            using var form = new Form();
+            using var control = new ProcessInputTestControl();
+            form.Controls.Add(control);
+            CommandManager.Initialize(form);
+
+            int executeCount = 0;
+            var command = new UICommand("Mouse", "Mouse", [new MouseGesture(MouseAction.RightDoubleClick)]);
+            control.GetCommandBindings().Add(new CommandBinding(command, (_, _) => executeCount++));
+
+            control.RaiseMouseClick(MouseButtons.Left, 2);
+            Assert.Equal(0, executeCount);
+
+            control.RaiseMouseClick(MouseButtons.Right, 2);
+            Assert.Equal(1, executeCount);
+        }
+
         //
 
         private sealed class ProcessInputTestForm : Form
@@ -342,6 +420,22 @@ namespace CommandForWinForms.Tests
                 var e = new KeyEventArgs(keyData);
                 e.Handled = handled;
                 OnKeyDown(e);
+                return e.Handled;
+            }
+
+            public void RaiseMouseClick(MouseButtons button, int clicks)
+            {
+                var e = new MouseEventArgs(button, clicks, 0, 0, 0);
+                if (clicks == 2)
+                    OnMouseDoubleClick(e);
+                else
+                    OnMouseClick(e);
+            }
+
+            public bool RaiseMouseWheel(int delta)
+            {
+                var e = new HandledMouseEventArgs(MouseButtons.None, 0, 0, 0, delta);
+                OnMouseWheel(e);
                 return e.Handled;
             }
 
