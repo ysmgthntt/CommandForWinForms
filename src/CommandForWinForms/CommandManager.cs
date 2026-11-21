@@ -54,76 +54,13 @@ namespace CommandForWinForms
         private static void Control_KeyDown(object? sender, KeyEventArgs e)
         {
             if (!e.Handled)
-                e.SuppressKeyPress = ProcessInput((Control?)sender, e);
+                e.SuppressKeyPress = ProcessInput((Control?)sender, (target, gesture) => gesture.Matches(target, e), true);
         }
 
         private static void Control_MouseClick(object? sender, MouseEventArgs e)
         {
-            ProcessMouseClick((Control?)sender, e);
-        }
-
-        private static void Control_MouseWheel(object? sender, MouseEventArgs e)
-        {
-            var handledMouseEventArgs = (HandledMouseEventArgs)e;
-            if (!handledMouseEventArgs.Handled)
-                handledMouseEventArgs.Handled = ProcessMouseClick((Control?)sender, MouseAction.WheelClick);
-        }
-
-        private static void Control_ControlAdded(object? sender, ControlEventArgs e)
-        {
-            var control = e.Control;
-            if (control is not null)
-                Initialize(control, Control_GotFocus, Control_KeyDown, Control_MouseClick, Control_MouseWheel, Control_ControlAdded);
-        }
-
-        private static bool ProcessInput(Control? target, KeyEventArgs keyEventArgs)
-        {
-            while (target is not null)
-            {
-                if (ControlCommandProperties.TryGetCollection<InputBinding>(target, out var inputBindings))
-                {
-                    foreach (var inputBinding in inputBindings)
-                    {
-                        if (inputBinding.Gesture.Matches(target, keyEventArgs))
-                        {
-                            ((ISynchronizeInvoke)target).BeginInvoke(ExecuteCommand, [inputBinding, target]);
-                            return true;
-                        }
-                    }
-                }
-
-                if (ControlCommandProperties.TryGetCollection<CommandBinding>(target, out var commandBindings))
-                {
-                    foreach (var commandBinding in commandBindings)
-                    {
-                        if (commandBinding.Command is UICommandBase uicommand)
-                        {
-                            if (uicommand.TryGetInputGestures(out var inputGestures))
-                            {
-                                foreach (var inputGesture in inputGestures)
-                                {
-                                    if (inputGesture.Matches(target, keyEventArgs))
-                                    {
-                                        if (uicommand.ExecuteIfCan(null, target))
-                                            return true;
-
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                target = target.Parent;
-            }
-
-            return false;
-        }
-
-        private static void ProcessMouseClick(Control? target, MouseEventArgs mouseEventArgs)
-        {
-            var mouseAction = mouseEventArgs switch
+            var modifiers = (ModifierKeys)Control.ModifierKeys;
+            var mouseAction = e switch
             {
                 { Button: MouseButtons.Left, Clicks: 2 } => MouseAction.LeftDoubleClick,
                 { Button: MouseButtons.Right, Clicks: 2 } => MouseAction.RightDoubleClick,
@@ -133,23 +70,40 @@ namespace CommandForWinForms
                 { Button: MouseButtons.Middle } => MouseAction.MiddleClick,
                 _ => MouseAction.None
             };
-
-            ProcessMouseClick(target, mouseAction);
+            ProcessInput((Control?)sender, (target, gesture) => gesture.Matches(target, mouseAction, modifiers), false);
         }
 
-        private static bool ProcessMouseClick(Control? target, MouseAction mouseAction)
+        private static void Control_MouseWheel(object? sender, MouseEventArgs e)
         {
-            var modifiers = (ModifierKeys)Control.ModifierKeys;
+            var handledMouseEventArgs = (HandledMouseEventArgs)e;
+            if (!handledMouseEventArgs.Handled)
+            {
+                var modifiers = (ModifierKeys)Control.ModifierKeys;
+                handledMouseEventArgs.Handled = ProcessInput((Control?)sender, (target, gesture) => gesture.Matches(target, MouseAction.WheelClick, modifiers), false);
+            }
+        }
 
+        private static void Control_ControlAdded(object? sender, ControlEventArgs e)
+        {
+            var control = e.Control;
+            if (control is not null)
+                Initialize(control, Control_GotFocus, Control_KeyDown, Control_MouseClick, Control_MouseWheel, Control_ControlAdded);
+        }
+
+        private static bool ProcessInput(Control? target, Func<Control, InputGesture, bool> matches, bool post)
+        {
             while (target is not null)
             {
                 if (ControlCommandProperties.TryGetCollection<InputBinding>(target, out var inputBindings))
                 {
                     foreach (var inputBinding in inputBindings)
                     {
-                        if (inputBinding.Gesture.Matches(target, mouseAction, modifiers))
+                        if (matches(target, inputBinding.Gesture))
                         {
-                            ExecuteCommand(inputBinding, target);
+                            if (post)
+                                ((ISynchronizeInvoke)target).BeginInvoke(ExecuteCommand, [inputBinding, target]);
+                            else
+                                ExecuteCommand(inputBinding, target);
                             return true;
                         }
                     }
@@ -165,7 +119,7 @@ namespace CommandForWinForms
                             {
                                 foreach (var inputGesture in inputGestures)
                                 {
-                                    if (inputGesture.Matches(target, mouseAction, modifiers))
+                                    if (matches(target, inputGesture))
                                     {
                                         if (uicommand.ExecuteIfCan(null, target))
                                             return true;
