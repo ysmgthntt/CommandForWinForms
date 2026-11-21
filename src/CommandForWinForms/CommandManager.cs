@@ -20,10 +20,11 @@ namespace CommandForWinForms
         {
             ArgumentNullException.ThrowIfNull(form);
 
-            Initialize(form, Control_GotFocus, Control_KeyDown, Control_ControlAdded);
+            Initialize(form, Control_GotFocus, Control_KeyDown, Control_MouseClick, Control_MouseWheel, Control_ControlAdded);
         }
 
-        private static void Initialize(Control control, EventHandler onGotFocus, KeyEventHandler onKeyDown, ControlEventHandler onControlAdded)
+        private static void Initialize(Control control, EventHandler onGotFocus, KeyEventHandler onKeyDown,
+            MouseEventHandler onMouseClick, MouseEventHandler onMouseWheel, ControlEventHandler onControlAdded)
         {
             if (control is not (Label or ContainerControl or Panel or GroupBox or Splitter or ProgressBar))
             {
@@ -33,12 +34,15 @@ namespace CommandForWinForms
                 control.GotFocus += onGotFocus;
                 control.KeyDown += onKeyDown;
             }
+            control.MouseClick += onMouseClick;
+            control.MouseDoubleClick += onMouseClick;
+            control.MouseWheel += onMouseWheel;
             control.ControlAdded += onControlAdded;
 
             if (control.Controls is { Count: > 0 } children)
             {
                 foreach (Control child in children)
-                    Initialize(child, onGotFocus, onKeyDown, onControlAdded);
+                    Initialize(child, onGotFocus, onKeyDown, onMouseClick, onMouseWheel, onControlAdded);
             }
         }
 
@@ -53,11 +57,23 @@ namespace CommandForWinForms
                 e.SuppressKeyPress = ProcessInput((Control?)sender, e);
         }
 
+        private static void Control_MouseClick(object? sender, MouseEventArgs e)
+        {
+            ProcessMouseClick((Control?)sender, e);
+        }
+
+        private static void Control_MouseWheel(object? sender, MouseEventArgs e)
+        {
+            var handledMouseEventArgs = (HandledMouseEventArgs)e;
+            if (!handledMouseEventArgs.Handled)
+                handledMouseEventArgs.Handled = ProcessMouseClick((Control?)sender, MouseAction.WheelClick);
+        }
+
         private static void Control_ControlAdded(object? sender, ControlEventArgs e)
         {
             var control = e.Control;
             if (control is not null)
-                Initialize(control, Control_GotFocus, Control_KeyDown, Control_ControlAdded);
+                Initialize(control, Control_GotFocus, Control_KeyDown, Control_MouseClick, Control_MouseWheel, Control_ControlAdded);
         }
 
         private static bool ProcessInput(Control? target, KeyEventArgs keyEventArgs)
@@ -87,6 +103,69 @@ namespace CommandForWinForms
                                 foreach (var inputGesture in inputGestures)
                                 {
                                     if (inputGesture.Matches(target, keyEventArgs))
+                                    {
+                                        if (uicommand.ExecuteIfCan(null, target))
+                                            return true;
+
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                target = target.Parent;
+            }
+
+            return false;
+        }
+
+        private static void ProcessMouseClick(Control? target, MouseEventArgs mouseEventArgs)
+        {
+            var mouseAction = mouseEventArgs switch
+            {
+                { Button: MouseButtons.Left, Clicks: 2 } => MouseAction.LeftDoubleClick,
+                { Button: MouseButtons.Right, Clicks: 2 } => MouseAction.RightDoubleClick,
+                { Button: MouseButtons.Middle, Clicks: 2 } => MouseAction.MiddleDoubleClick,
+                { Button: MouseButtons.Left } => MouseAction.LeftClick,
+                { Button: MouseButtons.Right } => MouseAction.RightClick,
+                { Button: MouseButtons.Middle } => MouseAction.MiddleClick,
+                _ => MouseAction.None
+            };
+
+            ProcessMouseClick(target, mouseAction);
+        }
+
+        private static bool ProcessMouseClick(Control? target, MouseAction mouseAction)
+        {
+            var modifiers = (ModifierKeys)Control.ModifierKeys;
+
+            while (target is not null)
+            {
+                if (ControlCommandProperties.TryGetCollection<InputBinding>(target, out var inputBindings))
+                {
+                    foreach (var inputBinding in inputBindings)
+                    {
+                        if (inputBinding.Gesture.Matches(target, mouseAction, modifiers))
+                        {
+                            ExecuteCommand(inputBinding, target);
+                            return true;
+                        }
+                    }
+                }
+
+                if (ControlCommandProperties.TryGetCollection<CommandBinding>(target, out var commandBindings))
+                {
+                    foreach (var commandBinding in commandBindings)
+                    {
+                        if (commandBinding.Command is UICommandBase uicommand)
+                        {
+                            if (uicommand.TryGetInputGestures(out var inputGestures))
+                            {
+                                foreach (var inputGesture in inputGestures)
+                                {
+                                    if (inputGesture.Matches(target, mouseAction, modifiers))
                                     {
                                         if (uicommand.ExecuteIfCan(null, target))
                                             return true;

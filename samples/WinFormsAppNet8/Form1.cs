@@ -12,6 +12,7 @@ namespace WinFormsAppNet8
 
         private static readonly UICommand Sample = new UICommand("Sample", "Sample", [new KeyGesture(Keys.F5)]);
         private static readonly UICommand Switch = new UICommand("Switch", "Switch", [new KeyGesture(Keys.F6)]);
+        private static readonly UICommand Wheel = new UICommand("Wheel", "Wheel", [new MouseGesture(MouseAction.WheelClick)]);
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -30,6 +31,9 @@ namespace WinFormsAppNet8
             panel2.CommandBindings.Add(new CommandBinding(Sample, Panel2_CommandExecuted));
 
             this.CommandBindings.Add(new CommandBinding(Switch, Switch_CommandExecuted));
+
+            panel3.InputBindings.Add(new MouseBinding(Sample, new MouseGesture(MouseAction.LeftClick)));
+            this.CommandBindings.Add(new CommandBinding(Wheel, (s, e) => Debug.WriteLine(DateTime.Now + " Wheel command executed")));
         }
 
         private void Form1_CommandExecuted(object? sender, ExecutedEventArgs e)
