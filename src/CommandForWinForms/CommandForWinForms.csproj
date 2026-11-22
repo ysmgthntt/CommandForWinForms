@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <!-- net45: ICommand -->
-    <TargetFrameworks>net5.0-windows;net45;net35</TargetFrameworks>
+    <!-- net8.0: UnsafeAccessor -->
+    <TargetFrameworks>net8.0-windows;net5.0-windows;net45;net35</TargetFrameworks>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>

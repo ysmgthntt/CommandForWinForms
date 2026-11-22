@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace CommandForWinForms
@@ -26,10 +28,8 @@ namespace CommandForWinForms
         private static void Initialize(Control control, EventHandler onGotFocus, KeyEventHandler onKeyDown,
             MouseEventHandler onMouseClick, MouseEventHandler onMouseWheel, ControlEventHandler onControlAdded)
         {
-            if (control is not (Label or ContainerControl or Panel or GroupBox or Splitter or ProgressBar))
+            if (IsSelectableControl(control))
             {
-                // TODO: Selectable
-
                 // Enter だとうまくいかないときがある。
                 control.GotFocus += onGotFocus;
                 control.KeyDown += onKeyDown;
@@ -152,6 +152,32 @@ namespace CommandForWinForms
                     command.Execute(parameter);
             }
         }
+
+#if NET8_0_OR_GREATER
+        [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "GetStyle")]
+        private static extern bool GetStyle(Control control, ControlStyles flag);
+#else
+        private static Func<Control, ControlStyles, bool> _getStyleMethod = CreateGetStyleMethod();
+
+        private static Func<Control, ControlStyles, bool> CreateGetStyleMethod()
+        {
+            var method = typeof(Control).GetMethod("GetStyle", BindingFlags.NonPublic | BindingFlags.Instance)!;
+            return (Func<Control, ControlStyles, bool>)Delegate.CreateDelegate(typeof(Func<Control, ControlStyles, bool>), method);
+        }
+#endif
+
+        private static bool IsSelectableControl(Control control)
+        {
+            if (control is Label or ContainerControl or Panel or GroupBox or Splitter or ProgressBar)
+                return false;
+#if NET8_0_OR_GREATER
+            return GetStyle(control, ControlStyles.Selectable);
+#else
+            return _getStyleMethod(control, ControlStyles.Selectable);
+#endif
+        }
+
+        //
 
         private static bool _requerySuggested;
 

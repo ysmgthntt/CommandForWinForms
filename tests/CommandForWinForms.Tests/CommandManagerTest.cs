@@ -21,6 +21,37 @@ namespace CommandForWinForms.Tests
         }
 
         [Fact]
+        public void InitializeSubscribesToKeyDownOnlyForSelectableControls()
+        {
+            using var form = new Form();
+            using var selectableControl = new ProcessInputTestControl(true);
+            using var nonSelectableControl = new ProcessInputTestControl(false);
+            using var selectablePanel = new SelectablePanel();
+            form.Controls.AddRange([selectableControl, nonSelectableControl, selectablePanel]);
+
+            var selectableCommand = new UICommand("Selectable", "Selectable", [new KeyGesture(Keys.A)]);
+            var nonSelectableCommand = new UICommand("NonSelectable", "NonSelectable", [new KeyGesture(Keys.B)]);
+            var panelCommand = new UICommand("Panel", "Panel", [new KeyGesture(Keys.C)]);
+            int selectableExecutionCount = 0;
+            int nonSelectableExecutionCount = 0;
+            int panelExecutionCount = 0;
+            selectableControl.GetCommandBindings().Add(new CommandBinding(selectableCommand, (_, _) => selectableExecutionCount++));
+            nonSelectableControl.GetCommandBindings().Add(new CommandBinding(nonSelectableCommand, (_, _) => nonSelectableExecutionCount++));
+            selectablePanel.GetCommandBindings().Add(new CommandBinding(panelCommand, (_, _) => panelExecutionCount++));
+
+            CommandManager.Initialize(form);
+
+            Assert.True(selectableControl.RaiseKeyDown(Keys.A));
+            Assert.Equal(1, selectableExecutionCount);
+
+            Assert.False(nonSelectableControl.RaiseKeyDown(Keys.B));
+            Assert.Equal(0, nonSelectableExecutionCount);
+
+            Assert.False(selectablePanel.RaiseKeyDown(Keys.C));
+            Assert.Equal(0, panelExecutionCount);
+        }
+
+        [Fact]
         public void ProcessInputTest()
         {
             using var form = new ProcessInputTestForm();
@@ -725,6 +756,35 @@ namespace CommandForWinForms.Tests
                 return e.Handled;
             }
 
+            IAsyncResult ISynchronizeInvoke.BeginInvoke(Delegate method, object[] args)
+            {
+                method.DynamicInvoke(args);
+                return null;
+            }
+
+            public ProcessInputTestControl() { }
+
+            public ProcessInputTestControl(bool selectable)
+            {
+                SetStyle(ControlStyles.Selectable, selectable);
+            }
+        }
+
+        private sealed class SelectablePanel : Panel, ISynchronizeInvoke
+        {
+            public SelectablePanel()
+            {
+                SetStyle(ControlStyles.Selectable, true);
+            }
+
+            public bool RaiseKeyDown(Keys keyData)
+            {
+                var e = new KeyEventArgs(keyData);
+                OnKeyDown(e);
+                return e.Handled;
+            }
+
+            // メッセージループがないため、自分で呼び出す。
             IAsyncResult ISynchronizeInvoke.BeginInvoke(Delegate method, object[] args)
             {
                 method.DynamicInvoke(args);
