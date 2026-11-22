@@ -138,7 +138,7 @@ namespace CommandForWinForms
             return false;
         }
 
-        private static void ExecuteCommand(ICommandSource commandSource, Control target)
+        private static void ExecuteCommand(/*ICommandSource*/InputBinding commandSource, Control target)
         {
             var command = commandSource.Command;
             var parameter = commandSource.CommandParameter;
@@ -157,7 +157,7 @@ namespace CommandForWinForms
         [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "GetStyle")]
         private static extern bool GetStyle(Control control, ControlStyles flag);
 #else
-        private static Func<Control, ControlStyles, bool> _getStyleMethod = CreateGetStyleMethod();
+        private static readonly Func<Control, ControlStyles, bool> _getStyleMethod = CreateGetStyleMethod();
 
         private static Func<Control, ControlStyles, bool> CreateGetStyleMethod()
         {
@@ -212,11 +212,14 @@ namespace CommandForWinForms
             ControlCommandProperties.RaiseCanExecuteChangedAllUICommands();
         }
 
+#pragma warning disable IDE0079
+#pragma warning disable SYSLIB1054
         private delegate void TimerProc(IntPtr hWnd, uint uMsg, IntPtr nIDEvent, uint dwTime);
         [DllImport("user32.dll", ExactSpelling = true)]
         private static extern IntPtr SetTimer(IntPtr hWnd, IntPtr nIDEvent, uint uElapse, TimerProc lpTimerFunc);
         [DllImport("user32.dll", ExactSpelling = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool KillTimer(IntPtr hWnd, IntPtr uIDEvent);
+#pragma warning restore SYSLIB1054
     }
 }

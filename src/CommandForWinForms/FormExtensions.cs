@@ -4,7 +4,7 @@
     {
         public static Control? GetActiveControl(this Form form)
         {
-            Control? activeControl = null;
+            Control? activeControl;
             IContainerControl? container = form;
             do
             {

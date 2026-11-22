@@ -42,6 +42,7 @@ internal static class ANE
         throw new ArgumentNullException(paramName);
 }
 #if NETFRAMEWORK
+#pragma warning disable IDE0130, IDE0290
 namespace System.Runtime.CompilerServices
 {
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = false)]
