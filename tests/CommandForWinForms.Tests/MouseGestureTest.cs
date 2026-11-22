@@ -9,15 +9,15 @@ namespace CommandForWinForms.Tests
         {
             var target = new MouseGesture();
             Assert.Equal(MouseAction.None, target.MouseAction);
-            Assert.Equal(ModifierKeys.None, target.Modifiers);
+            Assert.Equal(KeyModifiers.None, target.Modifiers);
 
             target = new MouseGesture(MouseAction.LeftClick);
             Assert.Equal(MouseAction.LeftClick, target.MouseAction);
-            Assert.Equal(ModifierKeys.None, target.Modifiers);
+            Assert.Equal(KeyModifiers.None, target.Modifiers);
 
-            target = new MouseGesture(MouseAction.RightDoubleClick, ModifierKeys.Alt | ModifierKeys.Control);
+            target = new MouseGesture(MouseAction.RightDoubleClick, KeyModifiers.Alt | KeyModifiers.Control);
             Assert.Equal(MouseAction.RightDoubleClick, target.MouseAction);
-            Assert.Equal(ModifierKeys.Alt | ModifierKeys.Control, target.Modifiers);
+            Assert.Equal(KeyModifiers.Alt | KeyModifiers.Control, target.Modifiers);
         }
 
         [Theory]
@@ -32,9 +32,9 @@ namespace CommandForWinForms.Tests
         {
             var target = new MouseGesture(mouseAction);
 
-            Assert.True(target.Matches(null, mouseAction, ModifierKeys.None));
-            Assert.False(target.Matches(null, otherMouseAction, ModifierKeys.None));
-            Assert.False(target.Matches(null, MouseAction.None, ModifierKeys.None));
+            Assert.True(target.Matches(null, mouseAction, KeyModifiers.None));
+            Assert.False(target.Matches(null, otherMouseAction, KeyModifiers.None));
+            Assert.False(target.Matches(null, MouseAction.None, KeyModifiers.None));
         }
 
         [Fact]
@@ -42,27 +42,27 @@ namespace CommandForWinForms.Tests
         {
             var target = new MouseGesture();
 
-            Assert.False(target.Matches(null, MouseAction.None, ModifierKeys.None));
-            Assert.False(target.Matches(null, MouseAction.LeftClick, ModifierKeys.None));
+            Assert.False(target.Matches(null, MouseAction.None, KeyModifiers.None));
+            Assert.False(target.Matches(null, MouseAction.LeftClick, KeyModifiers.None));
         }
 
         [Theory]
-        [InlineData(ModifierKeys.None)]
-        [InlineData(ModifierKeys.Alt)]
-        [InlineData(ModifierKeys.Control)]
-        [InlineData(ModifierKeys.Shift)]
-        [InlineData(ModifierKeys.Alt | ModifierKeys.Control)]
-        [InlineData(ModifierKeys.Alt | ModifierKeys.Shift)]
-        [InlineData(ModifierKeys.Control | ModifierKeys.Shift)]
-        [InlineData(ModifierKeys.Alt | ModifierKeys.Control | ModifierKeys.Shift)]
-        public void MatchesModifierKeysTest(ModifierKeys modifiers)
+        [InlineData(KeyModifiers.None)]
+        [InlineData(KeyModifiers.Alt)]
+        [InlineData(KeyModifiers.Control)]
+        [InlineData(KeyModifiers.Shift)]
+        [InlineData(KeyModifiers.Alt | KeyModifiers.Control)]
+        [InlineData(KeyModifiers.Alt | KeyModifiers.Shift)]
+        [InlineData(KeyModifiers.Control | KeyModifiers.Shift)]
+        [InlineData(KeyModifiers.Alt | KeyModifiers.Control | KeyModifiers.Shift)]
+        public void MatchesModifierKeysTest(KeyModifiers modifiers)
         {
-            const ModifierKeys all = (ModifierKeys.Alt | ModifierKeys.Control | ModifierKeys.Shift);
+            const KeyModifiers all = (KeyModifiers.Alt | KeyModifiers.Control | KeyModifiers.Shift);
 
             var target = new MouseGesture(MouseAction.LeftClick, modifiers);
             Assert.True(target.Matches(null, MouseAction.LeftClick, modifiers));
-            if (modifiers != ModifierKeys.None)
-                Assert.False(target.Matches(null, MouseAction.LeftClick, ModifierKeys.None));
+            if (modifiers != KeyModifiers.None)
+                Assert.False(target.Matches(null, MouseAction.LeftClick, KeyModifiers.None));
             if (modifiers != all)
                 Assert.False(target.Matches(null, MouseAction.LeftClick, modifiers | all));
             modifiers ^= all;

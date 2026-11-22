@@ -13,7 +13,7 @@
         /// <summary>
         /// Gets or sets the modifier keys associated with this gesture.
         /// </summary>
-        public ModifierKeys Modifiers { get; set; }
+        public KeyModifiers Modifiers { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MouseGesture"/> class.
@@ -26,14 +26,14 @@
         /// </summary>
         /// <param name="mouseAction">The mouse action associated with this gesture.</param>
         /// <param name="modifiers">The modifier keys associated with this gesture.</param>
-        public MouseGesture(MouseAction mouseAction, ModifierKeys modifiers = ModifierKeys.None)
+        public MouseGesture(MouseAction mouseAction, KeyModifiers modifiers = KeyModifiers.None)
         {
             MouseAction = mouseAction;
             Modifiers = modifiers;
         }
 
         /// <inheritdoc/>
-        protected internal override bool Matches(Control target, MouseAction mouseAction, ModifierKeys modifiers)
+        protected internal override bool Matches(Control target, MouseAction mouseAction, KeyModifiers modifiers)
             => MouseAction != MouseAction.None && mouseAction == MouseAction && modifiers == Modifiers;
     }
 }

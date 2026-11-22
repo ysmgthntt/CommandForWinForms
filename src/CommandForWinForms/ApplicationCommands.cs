@@ -15,7 +15,7 @@
         /// <remarks>
         /// Key gesture: Ctrl+X, Shift+Delete
         /// </remarks>
-        public static UICommandBase Cut => field ??= new UICommand(nameof(Cut), nameof(Cut), [new KeyGesture(Keys.X, ModifierKeys.Control), new KeyGesture(Keys.Delete, ModifierKeys.Shift)]);
+        public static UICommandBase Cut => field ??= new UICommand(nameof(Cut), nameof(Cut), [new KeyGesture(Keys.X, KeyModifiers.Control), new KeyGesture(Keys.Delete, KeyModifiers.Shift)]);
 
         /// <summary>
         /// Gets the command that copies the selected content to the clipboard.
@@ -23,7 +23,7 @@
         /// <remarks>
         /// Key gesture: Ctrl+C, Ctrl+Insert
         /// </remarks>
-        public static UICommandBase Copy => field ??= new UICommand(nameof(Copy), nameof(Copy), [new KeyGesture(Keys.C, ModifierKeys.Control), new KeyGesture(Keys.Insert, ModifierKeys.Control)]);
+        public static UICommandBase Copy => field ??= new UICommand(nameof(Copy), nameof(Copy), [new KeyGesture(Keys.C, KeyModifiers.Control), new KeyGesture(Keys.Insert, KeyModifiers.Control)]);
 
         /// <summary>
         /// Gets the command for pasting content.
@@ -31,7 +31,7 @@
         /// <remarks>
         /// Key gesture: Ctrl+V, Shift+Insert
         /// </remarks>
-        public static UICommandBase Paste => field ??= new UICommand(nameof(Paste), nameof(Paste), [new KeyGesture(Keys.V, ModifierKeys.Control), new KeyGesture(Keys.Insert, ModifierKeys.Shift)]);
+        public static UICommandBase Paste => field ??= new UICommand(nameof(Paste), nameof(Paste), [new KeyGesture(Keys.V, KeyModifiers.Control), new KeyGesture(Keys.Insert, KeyModifiers.Shift)]);
 
         /// <summary>
         /// Gets the command associated with the Delete key.
@@ -47,7 +47,7 @@
         /// <remarks>
         /// Key gesture: Ctrl+Z
         /// </remarks>
-        public static UICommandBase Undo => field ??= new UICommand(nameof(Undo), nameof(Undo), [new KeyGesture(Keys.Z, ModifierKeys.Control)]);
+        public static UICommandBase Undo => field ??= new UICommand(nameof(Undo), nameof(Undo), [new KeyGesture(Keys.Z, KeyModifiers.Control)]);
 
         /// <summary>
         /// Gets the command that reapplies the most recently undone action.
@@ -55,7 +55,7 @@
         /// <remarks>
         /// Key gesture: Ctrl+Y
         /// </remarks>
-        public static UICommandBase Redo => field ??= new UICommand(nameof(Redo), nameof(Redo), [new KeyGesture(Keys.Y, ModifierKeys.Control)]);
+        public static UICommandBase Redo => field ??= new UICommand(nameof(Redo), nameof(Redo), [new KeyGesture(Keys.Y, KeyModifiers.Control)]);
 
         /// <summary>
         /// Gets the command for finding content.
@@ -63,7 +63,7 @@
         /// <remarks>
         /// Key gesture: Ctrl+F
         /// </remarks>
-        public static UICommandBase Find => field ??= new UICommand(nameof(Find), nameof(Find), [new KeyGesture(Keys.F, ModifierKeys.Control)]);
+        public static UICommandBase Find => field ??= new UICommand(nameof(Find), nameof(Find), [new KeyGesture(Keys.F, KeyModifiers.Control)]);
 
         /// <summary>
         /// Represents the Replace command.
@@ -71,12 +71,12 @@
         /// <remarks>
         /// Key gesture: Ctrl+H
         /// </remarks>
-        public static UICommandBase Replace => field ??= new UICommand(nameof(Replace), nameof(Replace), [new KeyGesture(Keys.H, ModifierKeys.Control)]);
+        public static UICommandBase Replace => field ??= new UICommand(nameof(Replace), nameof(Replace), [new KeyGesture(Keys.H, KeyModifiers.Control)]);
 
         /// <summary>
         /// Gets the command that selects all items.
         /// </summary>
-        public static UICommandBase SelectAll => field ??= new UICommand(nameof(SelectAll), nameof(SelectAll), [new KeyGesture(Keys.A, ModifierKeys.Control)]);
+        public static UICommandBase SelectAll => field ??= new UICommand(nameof(SelectAll), nameof(SelectAll), [new KeyGesture(Keys.A, KeyModifiers.Control)]);
 
         /// <summary>
         /// Gets the help command.
@@ -92,7 +92,7 @@
         /// <remarks>
         /// Key gesture: Ctrl+N
         /// </remarks>
-        public static UICommandBase New => field ??= new UICommand(nameof(New), nameof(New), [new KeyGesture(Keys.N, ModifierKeys.Control)]);
+        public static UICommandBase New => field ??= new UICommand(nameof(New), nameof(New), [new KeyGesture(Keys.N, KeyModifiers.Control)]);
 
         /// <summary>
         /// Gets the command for opening an existing item.
@@ -100,7 +100,7 @@
         /// <remarks>
         /// Key gesture: Ctrl+O
         /// </remarks>
-        public static UICommandBase Open => field ??= new UICommand(nameof(Open), nameof(Open), [new KeyGesture(Keys.O, ModifierKeys.Control)]);
+        public static UICommandBase Open => field ??= new UICommand(nameof(Open), nameof(Open), [new KeyGesture(Keys.O, KeyModifiers.Control)]);
 
         /// <summary>
         /// Gets the command that closes the current document or window.
@@ -113,7 +113,7 @@
         /// <remarks>
         /// Key gesture: Ctrl+S
         /// </remarks>
-        public static UICommandBase Save => field ??= new UICommand(nameof(Save), nameof(Save), [new KeyGesture(Keys.S, ModifierKeys.Control)]);
+        public static UICommandBase Save => field ??= new UICommand(nameof(Save), nameof(Save), [new KeyGesture(Keys.S, KeyModifiers.Control)]);
 
         /// <summary>
         /// Gets the command for saving the current document under a new name.
@@ -126,7 +126,7 @@
         /// <remarks>
         /// Key gesture: Ctrl+P
         /// </remarks>
-        public static UICommandBase Print => field ??= new UICommand(nameof(Print), nameof(Print), [new KeyGesture(Keys.P, ModifierKeys.Control)]);
+        public static UICommandBase Print => field ??= new UICommand(nameof(Print), nameof(Print), [new KeyGesture(Keys.P, KeyModifiers.Control)]);
 
         /// <summary>
         /// Gets the command that cancels printing.
@@ -139,7 +139,7 @@
         /// <remarks>
         /// Key gesture: Ctrl+F2
         /// </remarks>
-        public static UICommandBase PrintPreview => field ??= new UICommand(nameof(PrintPreview), nameof(PrintPreview), [new KeyGesture(Keys.F2, ModifierKeys.Control)]);
+        public static UICommandBase PrintPreview => field ??= new UICommand(nameof(PrintPreview), nameof(PrintPreview), [new KeyGesture(Keys.F2, KeyModifiers.Control)]);
 
         /// <summary>
         /// Gets the Properties command.
@@ -155,7 +155,7 @@
         /// <remarks>
         /// Key gesture: Application key, Shift+F10
         /// </remarks>
-        public static UICommandBase ContextMenu => field ??= new UICommand(nameof(ContextMenu), nameof(ContextMenu), [new KeyGesture(Keys.Apps), new KeyGesture(Keys.F10, ModifierKeys.Shift)]);
+        public static UICommandBase ContextMenu => field ??= new UICommand(nameof(ContextMenu), nameof(ContextMenu), [new KeyGesture(Keys.Apps), new KeyGesture(Keys.F10, KeyModifiers.Shift)]);
 
         /// <summary>
         /// Gets the stop command.

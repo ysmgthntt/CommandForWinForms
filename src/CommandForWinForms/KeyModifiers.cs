@@ -4,7 +4,7 @@
     /// Specifies modifier keys that can be combined with an input gesture.
     /// </summary>
     [Flags]
-    public enum ModifierKeys
+    public enum KeyModifiers
     {
         /// <summary>
         /// No modifier keys.

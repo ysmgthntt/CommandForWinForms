@@ -13,7 +13,7 @@
         /// <summary>
         /// Gets the modifier keys associated with this gesture.
         /// </summary>
-        public ModifierKeys Modifiers { get; }
+        public KeyModifiers Modifiers { get; }
 
         /// <summary>
         /// Gets the display string representing this gesture.
@@ -27,7 +27,7 @@
         public KeyGesture(Keys key)
         {
             Key = key;
-            Modifiers = ModifierKeys.None;
+            Modifiers = KeyModifiers.None;
             DisplayString = "";
         }
 
@@ -38,7 +38,7 @@
         /// <param name="key">The key associated with this gesture.</param>
         /// <param name="modifiers">The modifier keys associated with this gesture.</param>
         /// <param name="displayString">The display string representing this gesture.</param>
-        public KeyGesture(Keys key, ModifierKeys modifiers, string displayString = "")
+        public KeyGesture(Keys key, KeyModifiers modifiers, string displayString = "")
         {
             ArgumentNullException.ThrowIfNull(displayString);
 

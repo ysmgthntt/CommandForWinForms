@@ -34,7 +34,7 @@
         /// <summary>
         /// Gets or sets the modifier keys associated with this binding.
         /// </summary>
-        public ModifierKeys Modifiers
+        public KeyModifiers Modifiers
         {
             get => ((KeyGesture)Gesture).Modifiers;
             set
@@ -60,7 +60,7 @@
         /// <param name="command">The command associated with this binding.</param>
         /// <param name="key">The key associated with this binding.</param>
         /// <param name="modifiers">The modifier keys associated with this binding.</param>
-        public KeyBinding(ICommand command, Keys key, ModifierKeys modifiers)
+        public KeyBinding(ICommand command, Keys key, KeyModifiers modifiers)
             : base(command, new KeyGesture(key, modifiers)) { }
     }
 }

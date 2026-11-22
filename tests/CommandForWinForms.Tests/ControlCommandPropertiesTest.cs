@@ -65,12 +65,12 @@ namespace CommandForWinForms.Tests
             Assert.Equal(inputBindings1, control1.GetInputBindings());
             Assert.Equal(0, control1.GetInputBindings().Count);
 
-            var inputBinding1 = new KeyBinding(command, Keys.A, ModifierKeys.None);
+            var inputBinding1 = new KeyBinding(command, Keys.A, KeyModifiers.None);
             control1.GetInputBindings().Add(inputBinding1);
             Assert.Equal(1, control1.GetInputBindings().Count);
             Assert.Equal(inputBinding1, control1.GetInputBindings()[0]);
 
-            var inputBinding2 = new KeyBinding(command, Keys.A, ModifierKeys.None);
+            var inputBinding2 = new KeyBinding(command, Keys.A, KeyModifiers.None);
             control1.GetInputBindings().Add(inputBinding2);
             Assert.Equal(2, control1.GetInputBindings().Count);
             Assert.Equal(inputBinding1, control1.GetInputBindings()[0]);
@@ -83,7 +83,7 @@ namespace CommandForWinForms.Tests
             Assert.Equal(2, control1.GetInputBindings().Count);
             Assert.Equal(0, control2.GetInputBindings().Count);
 
-            var inputBinding3 = new KeyBinding(command, Keys.A, ModifierKeys.None);
+            var inputBinding3 = new KeyBinding(command, Keys.A, KeyModifiers.None);
             control2.GetInputBindings().Add(inputBinding3);
             Assert.Equal(2, control1.GetInputBindings().Count);
             Assert.Equal(1, control2.GetInputBindings().Count);
@@ -112,7 +112,7 @@ namespace CommandForWinForms.Tests
             using var control = new Control();
 
             control.GetCommandBindings().Add(new CommandBinding(command));
-            control.GetInputBindings().Add(new KeyBinding(command, Keys.A, ModifierKeys.None));
+            control.GetInputBindings().Add(new KeyBinding(command, Keys.A, KeyModifiers.None));
 
             Assert.True(ControlCommandProperties.TryGetCollection<CommandBinding>(control, out _));
             Assert.True(ControlCommandProperties.TryGetCollection<InputBinding>(control, out _));

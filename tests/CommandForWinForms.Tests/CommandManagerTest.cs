@@ -145,11 +145,11 @@ namespace CommandForWinForms.Tests
             // InputBindings
 
             inputBinding = true;
-            control1.GetInputBindings().Add(new KeyBinding(commandA2, Keys.C, ModifierKeys.None) { CommandParameter = parameter });
-            control1.GetInputBindings().Add(new KeyBinding(commandA1, Keys.C, ModifierKeys.None) { CommandParameter = parameter });
-            control1.GetInputBindings().Add(new KeyBinding(commandB2, Keys.A, ModifierKeys.None) { CommandParameter = parameter });
-            control1.GetInputBindings().Add(new KeyBinding(commandB1, Keys.A, ModifierKeys.None) { CommandParameter = parameter });
-            control1.GetInputBindings().Add(new KeyBinding(commandC, Keys.B, ModifierKeys.None) { CommandParameter = parameter });
+            control1.GetInputBindings().Add(new KeyBinding(commandA2, Keys.C, KeyModifiers.None) { CommandParameter = parameter });
+            control1.GetInputBindings().Add(new KeyBinding(commandA1, Keys.C, KeyModifiers.None) { CommandParameter = parameter });
+            control1.GetInputBindings().Add(new KeyBinding(commandB2, Keys.A, KeyModifiers.None) { CommandParameter = parameter });
+            control1.GetInputBindings().Add(new KeyBinding(commandB1, Keys.A, KeyModifiers.None) { CommandParameter = parameter });
+            control1.GetInputBindings().Add(new KeyBinding(commandC, Keys.B, KeyModifiers.None) { CommandParameter = parameter });
 
             ResetCount();
             Assert.True(control2.RaiseKeyDown(Keys.A));
@@ -233,11 +233,11 @@ namespace CommandForWinForms.Tests
             // InputBindings
 
             inputBinding = true;
-            control2.GetInputBindings().Add(new KeyBinding(commandA2, Keys.C, ModifierKeys.None) { CommandParameter = parameter });
-            control2.GetInputBindings().Add(new KeyBinding(commandA1, Keys.C, ModifierKeys.None) { CommandParameter = parameter });
-            control2.GetInputBindings().Add(new KeyBinding(commandB1, Keys.A, ModifierKeys.None) { CommandParameter = parameter });
-            control2.GetInputBindings().Add(new KeyBinding(commandB2, Keys.A, ModifierKeys.None) { CommandParameter = parameter });
-            control2.GetInputBindings().Add(new KeyBinding(commandC, Keys.B, ModifierKeys.None) { CommandParameter = parameter });
+            control2.GetInputBindings().Add(new KeyBinding(commandA2, Keys.C, KeyModifiers.None) { CommandParameter = parameter });
+            control2.GetInputBindings().Add(new KeyBinding(commandA1, Keys.C, KeyModifiers.None) { CommandParameter = parameter });
+            control2.GetInputBindings().Add(new KeyBinding(commandB1, Keys.A, KeyModifiers.None) { CommandParameter = parameter });
+            control2.GetInputBindings().Add(new KeyBinding(commandB2, Keys.A, KeyModifiers.None) { CommandParameter = parameter });
+            control2.GetInputBindings().Add(new KeyBinding(commandC, Keys.B, KeyModifiers.None) { CommandParameter = parameter });
 
             ResetCount();
             Assert.True(control2.RaiseKeyDown(Keys.A));
@@ -347,7 +347,7 @@ namespace CommandForWinForms.Tests
                 canExecuteCount++;
                 return true;
             });
-            control.GetInputBindings().Add(new KeyBinding(command, Keys.A, ModifierKeys.None) { CommandParameter = parameter });
+            control.GetInputBindings().Add(new KeyBinding(command, Keys.A, KeyModifiers.None) { CommandParameter = parameter });
 
             control.RaiseKeyDown(Keys.A);
             Assert.Equal(1, executeCount);

@@ -12,7 +12,7 @@ namespace CommandForWinForms.Tests
             Assert.Throws<ArgumentNullException>("gesture", () => new MouseBinding(command, (MouseGesture)null));
             Assert.Throws<ArgumentNullException>("command", () => new MouseBinding(null, MouseAction.LeftClick));
 
-            var gesture = new MouseGesture(MouseAction.LeftClick, ModifierKeys.Shift);
+            var gesture = new MouseGesture(MouseAction.LeftClick, KeyModifiers.Shift);
             var target = new MouseBinding(command, gesture);
             Assert.Equal(command, target.Command);
             Assert.Equal(gesture, target.Gesture);
@@ -32,7 +32,7 @@ namespace CommandForWinForms.Tests
             Assert.Throws<ArgumentException>("value", () => target.Gesture = null);
             Assert.Throws<ArgumentException>("value", () => target.Gesture = new KeyGesture(Keys.A));
 
-            var gesture = new MouseGesture(MouseAction.MiddleDoubleClick, ModifierKeys.Control);
+            var gesture = new MouseGesture(MouseAction.MiddleDoubleClick, KeyModifiers.Control);
             target.Gesture = gesture;
             Assert.Equal(gesture, target.Gesture);
             Assert.Equal(MouseAction.MiddleDoubleClick, target.MouseAction);

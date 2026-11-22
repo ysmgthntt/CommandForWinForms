@@ -59,7 +59,7 @@ namespace CommandForWinForms
 
         private static void Control_MouseClick(object? sender, MouseEventArgs e)
         {
-            var modifiers = (ModifierKeys)Control.ModifierKeys;
+            var modifiers = (KeyModifiers)Control.ModifierKeys;
             var mouseAction = e switch
             {
                 { Button: MouseButtons.Left, Clicks: 2 } => MouseAction.LeftDoubleClick,
@@ -78,7 +78,7 @@ namespace CommandForWinForms
             var handledMouseEventArgs = (HandledMouseEventArgs)e;
             if (!handledMouseEventArgs.Handled)
             {
-                var modifiers = (ModifierKeys)Control.ModifierKeys;
+                var modifiers = (KeyModifiers)Control.ModifierKeys;
                 handledMouseEventArgs.Handled = ProcessInput((Control?)sender, (target, gesture) => gesture.Matches(target, MouseAction.WheelClick, modifiers), false);
             }
         }

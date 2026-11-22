@@ -6,7 +6,7 @@
     /// <remarks>
     /// Derive from this class to define custom input gestures by overriding the appropriate
     /// <see cref="Matches(Control, KeyEventArgs)"/> or
-    /// <see cref="Matches(Control, MouseAction, ModifierKeys)"/> method.
+    /// <see cref="Matches(Control, MouseAction, KeyModifiers)"/> method.
     /// </remarks>
     public abstract class InputGesture
     {
@@ -29,6 +29,6 @@
         /// <returns>
         /// <see langword="true"/> if the input matches this gesture; otherwise, <see langword="false"/>.
         /// </returns>
-        protected internal virtual bool Matches(Control target, MouseAction mouseAction, ModifierKeys modifiers) => false;
+        protected internal virtual bool Matches(Control target, MouseAction mouseAction, KeyModifiers modifiers) => false;
     }
 }
