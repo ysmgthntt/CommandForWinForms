@@ -1,4 +1,4 @@
-﻿namespace CommandForWinForms
+﻿namespace RoutedCommands.WinForms
 {
     /// <summary>
     /// Provides data for a command execution event.

@@ -1,4 +1,4 @@
-﻿namespace CommandForWinForms
+﻿namespace RoutedCommands.WinForms
 {
     public partial class ControlCommandProperties
     {

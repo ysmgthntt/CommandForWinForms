@@ -1,5 +1,5 @@
 ﻿#if NET35
-namespace CommandForWinForms
+namespace RoutedCommands.WinForms
 {
     /// <summary>
     /// Defines a command that can be executed and whose execution availability can be determined.

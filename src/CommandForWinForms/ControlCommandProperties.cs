@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 
-namespace CommandForWinForms
+namespace RoutedCommands.WinForms
 {
     /// <summary>
     /// Provides methods and properties for associating commands and input bindings with controls.

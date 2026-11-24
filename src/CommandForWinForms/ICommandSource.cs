@@ -1,4 +1,4 @@
-﻿namespace CommandForWinForms
+﻿namespace RoutedCommands.WinForms
 {
     /// <summary>
     /// Defines the source object that invokes the command.

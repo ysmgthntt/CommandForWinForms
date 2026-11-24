@@ -1,7 +1,7 @@
 ﻿#if false
 using System.Runtime.CompilerServices;
 
-namespace CommandForWinForms
+namespace RoutedCommands.WinForms
 {
     internal sealed class WeakEventHandler
     {

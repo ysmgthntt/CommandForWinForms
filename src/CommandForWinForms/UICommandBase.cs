@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 
-namespace CommandForWinForms
+namespace RoutedCommands.WinForms
 {
     /// <summary>
     /// Provides the base class for commands that can be associated with user interface elements.

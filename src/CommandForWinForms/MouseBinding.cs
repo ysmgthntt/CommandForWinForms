@@ -1,4 +1,4 @@
-﻿namespace CommandForWinForms
+﻿namespace RoutedCommands.WinForms
 {
     /// <summary>
     /// Associates a mouse gesture with a command.

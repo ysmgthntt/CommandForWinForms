@@ -1,4 +1,4 @@
-﻿namespace CommandForWinForms
+﻿namespace RoutedCommands.WinForms
 {
     /// <summary>
     /// Provides commonly used commands for standard application operations.

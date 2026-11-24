@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace CommandForWinForms
+namespace RoutedCommands.WinForms
 {
     /// <summary>
     /// Provides data for events that determine whether a command can be executed.

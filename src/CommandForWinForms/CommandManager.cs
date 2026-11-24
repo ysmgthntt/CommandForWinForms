@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace CommandForWinForms
+namespace RoutedCommands.WinForms
 {
     /// <summary>
     /// Manages command processing for a form.

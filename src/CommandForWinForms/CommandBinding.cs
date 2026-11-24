@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace CommandForWinForms
+namespace RoutedCommands.WinForms
 {
     /// <summary>
     /// Binds a command to the events that determine and perform its execution.

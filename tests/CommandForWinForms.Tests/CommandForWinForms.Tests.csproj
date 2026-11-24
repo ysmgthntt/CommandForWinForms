@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <Using Include="Xunit" />
+    <Using Include="RoutedCommands.WinForms" />
   </ItemGroup>
 
 </Project>

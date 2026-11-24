@@ -1,4 +1,4 @@
-using CommandForWinForms;
+using RoutedCommands.WinForms;
 using System.Diagnostics;
 
 namespace WinFormsAppNet8
