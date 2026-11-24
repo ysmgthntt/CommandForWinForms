@@ -1,6 +1,6 @@
 # RoutedCommands for Windows Forms
 
-**RoutedCommandsForWinForms** is a command routing library for Windows Forms applications.
+**RoutedCommands.WinForms** is a command routing library for Windows Forms applications.
 
 It provides routed command processing with `CommandBinding`, including tunneling and bubbling event routing, allowing command handling to be separated from the controls that initiate commands.
 
@@ -23,13 +23,13 @@ Install the NuGet package.
 Using the .NET CLI:
 
 ```bash
-dotnet add package RoutedCommandsForWinForms
+dotnet add package RoutedCommands.WinForms
 ```
 
 Using the Package Manager Console:
 
 ```powershell
-Install-Package RoutedCommandsForWinForms
+Install-Package RoutedCommands.WinForms
 ```
 
 ## Getting Started
@@ -40,7 +40,7 @@ Call `CommandManager.Initialize` with the form to enable command processing and 
 
 ```csharp
 using System.Windows.Forms;
-using CommandForWinForms;
+using RoutedCommands.WinForms;
 
 public partial class MainForm : Form
 {
@@ -134,7 +134,7 @@ This allows commands to be handled by the control that initiated them, a parent 
 
 ## Supported Frameworks
 
-RoutedCommandsForWinForms targets the following frameworks:
+RoutedCommands.WinForms targets the following frameworks:
 
 - .NET 5 or later
 - .NET Framework 3.5 or later
