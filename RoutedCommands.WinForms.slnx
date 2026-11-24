@@ -3,9 +3,9 @@
     <Project Path="samples/WinFormsAppNet8/WinFormsAppNet8.csproj" />
   </Folder>
   <Folder Name="/src/">
-    <Project Path="src/CommandForWinForms/CommandForWinForms.csproj" />
+    <Project Path="src/CommandForWinForms/RoutedCommands.WinForms.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/CommandForWinForms.Tests/CommandForWinForms.Tests.csproj" />
+    <Project Path="tests/CommandForWinForms.Tests/RoutedCommands.WinForms.Tests.csproj" />
   </Folder>
 </Solution>

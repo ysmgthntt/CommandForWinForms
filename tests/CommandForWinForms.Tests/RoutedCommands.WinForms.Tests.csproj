@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\CommandForWinForms\CommandForWinForms.csproj" />
+    <ProjectReference Include="..\..\src\CommandForWinForms\RoutedCommands.WinForms.csproj" />
   </ItemGroup>
 
   <ItemGroup>
